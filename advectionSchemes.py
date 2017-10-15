@@ -29,10 +29,11 @@ show()
 
 for it in range(nt):
     for ix in range(1, nx-1):
-        phi[ix]=phiOld[ix]-0.5*c*(phiOld[ix+1]-phiOld[ix-1])
+        phi[ix]=phiOld[ix]-c*(phiOld[ix]-phiOld[ix-1])
         #end of for ix in range(1, nx-1):
-    phi[0]=phiOld[ix]-0.5*c*(phiOld[1]-phiOld[nx-2])
-    phi[nx-1]=phi[0]
+    phi[0]=phiOld[ix]-c*(phiOld[1]-phiOld[nx-2])
+    #phi[nx-1]=phi[0] #keep this only for periodic boundary conditions
+    phi[nx-1]=phiOld[nx-1]-c*(phiOld[nx-1]-phiOld[nx-1-1])
     phiOld=phi.copy()
     if it%8==0:
        plot(x, phi)
@@ -41,7 +42,5 @@ for it in range(nt):
        plt.ylim([-0.2, 1.2])
     #input("press return to continue")
     #end of for it in range(nt):
-#print(phi)
-#print(phi)
 show()
-print("Fine")
+#print("Fine")
