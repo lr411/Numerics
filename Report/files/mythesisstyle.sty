@@ -1,0 +1,273 @@
+% Thesis style -- hacked and modified by E.L.
+% 
+%
+\typeout{Document Style Option 'mythesisstyle' -- April  2011, version 1.1 (ACS)}
+\makeatletter
+%\oddsidemargin 3.8cm\advance\oddsidemargin by -1in
+\oddsidemargin .6in%\advance\oddsidemargin by -1in
+%\evensidemargin 3.8cm\advance\evensidemargin by -1in
+\evensidemargin .6in%\advance\evensidemargin by -1in
+
+\if@twoside
+   \advance\evensidemargin by -1.0cm
+\fi  % Adjust evensidemargin if twoside option specified **MS**
+%\textwidth 8.5in\advance\textwidth by -3.8cm\advance\textwidth by -2.5cm
+\textwidth 5.8in%\advance\textwidth by -3.8cm\advance\textwidth by -2.5cm
+
+%\topmargin 1in\advance\topmargin by -2.5cm
+\topmargin .1in
+%\headsep 2.5cm
+\headsep 0in
+\headheight -0.3in
+\footskip .3in
+%\textheight 11in
+\textheight 8.5in
+%\advance\textheight by -5cm % To account for header and TeX's top margin
+%\advance\textheight by -2.5cm % Bottom margin
+\advance\textheight by -0.7in % Bottom margin
+
+\marginparwidth 40pt \marginparsep 10pt
+\brokenpenalty=10000
+\renewcommand{\baselinestretch}{1.3}
+\def\@xfloat#1[#2]{\ifhmode \@bsphack\@floatpenalty -\@Mii\else
+   \@floatpenalty-\@Miii\fi\def\@captype{#1}\ifinner
+      \@parmoderr\@floatpenalty\z@
+    \else\@next\@currbox\@freelist{\@tempcnta\csname ftype@#1\endcsname
+       \multiply\@tempcnta\@xxxii\advance\@tempcnta\sixt@@n
+       \@tfor \@tempa :=#2\do
+                        {\if\@tempa h\advance\@tempcnta \@ne\fi
+                         \if\@tempa t\advance\@tempcnta \tw@\fi
+                         \if\@tempa b\advance\@tempcnta 4\relax\fi
+                         \if\@tempa p\advance\@tempcnta 8\relax\fi
+         }\global\count\@currbox\@tempcnta}\@fltovf\fi
+    \global\setbox\@currbox\vbox\bgroup 
+    \def\baselinestretch{1}\@normalsize
+    \boxmaxdepth\z@
+    \hsize\columnwidth \@parboxrestore}
+\long\def\@footnotetext#1{\insert\footins{\def\baselinestretch{1}\footnotesize
+    \interlinepenalty\interfootnotelinepenalty 
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+   \edef\@currentlabel{\csname p@footnote\endcsname\@thefnmark}\@makefntext
+    {\rule{\z@}{\footnotesep}\ignorespaces
+      #1\strut}}}
+\def\@title{}
+\def\@author{}
+\def\@docrevision{123}
+\newsavebox{\@qual}
+\newif\ifqvoid
+\qvoidtrue
+\def\@qualifications#1{\ifqvoid
+			\sbox{\@qual}{\parbox{\textwidth}
+				{\begin{center}\@author\\\end{center}}}
+			\qvoidfalse
+			\fi
+			\sbox{\@qual}{\parbox{\textwidth}
+				{\begin{center}\usebox{\@qual}\\{#1}\end{center}}}
+		       }
+\gdef\qualification#1{\@qualifications{#1}}
+\def\entity#1{\gdef\@entity{#1}}
+\def\@entity{Department}
+\def\dept#1{\gdef\@dept{#1}}
+\def\@dept{Mathematics}
+\def\degree#1{\gdef\@degree{#1}}
+\def\@degree{Master of Science}
+% 
+\def\copyrightmsg#1{\gdef\@copyrightmsg{#1}}
+\def\@copyrightmsg{All rights reserved,}
+                   
+\def\endeavour#1{\gdef\@endeavour{#1}}
+\def\@endeavour{dissertation}
+\def\submitdate#1{\gdef\@submitdate{#1}}
+\def\@submitdate{\ifcase\the\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space \number\the\year}
+\def\copyrightyear#1{\gdef\@copyrightyear{#1}} % \author, \title in report
+\def\@copyrightyear{\space\number\the\year}
+\def\advisor#1{\gdef\@advisor{#1}}
+
+\newif\ifcontentspage
+\contentspagetrue 
+\newif\iffigurespage \newif\iftablespage
+\figurespagefalse \tablespagefalse
+
+% For other lists eg, maps, abbreviations **MS**
+\newif\ifotherlistpage \otherlistpagefalse
+\def\@otherlist{ %  Call user's macro \otherlist **MS** 
+	\otherlist
+	}
+
+	\def\titlep{
+	\thispagestyle{empty}%
+	\begingroup
+	\null\vskip .5in 
+	\typeout{Title  page.}
+	\begin{center}
+		{\Large\uppercase\expandafter{\bf \@title}}
+	\end{center}
+	\vskip.25in
+	\begin{center}
+		\rm by\\
+	\end{center}
+	\usebox{\@qual}
+	\vfill
+	\begin{center}
+		 {
+		 Document Revision {\@docrevision}\\
+%		 \expandafter{\@degree}\\
+		 }
+%		{ \expandafter{\@entity}
+%		of	 
+ %		\expandafter{\@dept}\\}
+%		 Imperial College London\\
+		\@submitdate\\
+	\end{center}
+	\vskip.5in\vfill
+	\vspace{1.0in}
+%%k%
+\noindent\makebox[\textwidth]{\hfill\makebox[2.5in]{\hrulefill}}\\
+\makebox[\textwidth]{\hfill\makebox[2.5in]{\hfill Teacher: \@advisor\hfill}}
+
+%%%k%	
+%	\newpage
+%	\vskip.35in
+%	\vfill
+%		\begin{center}
+%		\copyright\ \@author\\
+%		\@copyrightmsg \ \@copyrightyear .\	
+%
+%	\end{center}
+%	\thispagestyle{empty}
+%%	\begin{center}
+%%		\	
+%%		MY UNIVERSITY
+%%	\end{center}
+	%\vskip1in
+%	\begin{center}
+%	  \small
+%	  \@copyrightmsg  
+%	\end{center}
+	\endgroup}
+		
+\def\apdesclabel#1{\hspace\labelsep \bf #1:\hfill}
+\def\apdesc{\list{}{\leftmargin\apdescmargin
+\labelwidth\leftmargin \advance\labelwidth -\labelsep
+\let\makelabel\apdesclabel}}
+\let\endapdesc\endlist
+\newdimen\apdescmargin
+\apdescmargin=2in
+
+
+
+
+\def\beforepreface{
+	\pagenumbering{roman}
+	\pagestyle{plain}
+	\headsep 0in
+	\advance\textheight by .5in
+	\titlep
+	\thispagestyle{empty}
+      \vspace*{0in}
+     \newpage
+	\headsep .5in
+	}
+
+\def\prefacesection#1{
+	\typeout{Front matter: #1.}
+	\chapter*{#1}
+	\addcontentsline{toc}{chapter}{#1}
+	}
+
+\def\afterpreface{
+	\ifcontentspage
+		\newpage
+		{\addvspace{10pt}
+		%\addcontentsline{toc}{chapter}{Table of Contents} %% 
+		\tableofcontents
+		}
+		\newpage
+	\fi
+%	\iftablespage
+%		{\addvspace{10pt}
+%		\addcontentsline{toc}{chapter}{List of Tables}
+%	  	\listoftables
+%		}
+%		\newpage
+%	\fi
+	\iffigurespage
+		{\addvspace{10pt}
+		\addcontentsline{toc}{chapter}{List of Figures}
+		\listoffigures
+		}
+		\newpage
+	\fi
+	\ifotherlistpage
+		{\addvspace{10pt}
+		\@otherlist
+		}
+		\newpage
+	\fi
+	\pagenumbering{arabic}
+	\pagestyle{plain}
+	}
+
+\pagestyle{headings}
+\def\l@chapter{\@dottedtocline{0}{1.5em}{2.3em}}
+\def\l@section{\@dottedtocline{1}{3.8em}{3.2em}}
+\def\l@subsection{\@dottedtocline{2}{7.0em}{4.1em}}
+%\def\l@subsubsection{\@dottedtocline{3}{10.0em}{5.0em}} % use if you set section depth to 3
+\def\l@subsubsection{\@dottedtocline{3}{11.2em}{5.0em}} % subsections not numbered
+
+		% All entries in toc need dotted lines   **MS**
+
+\newif\ifappendices\appendicesfalse
+\newif\iffirstappendix\firstappendixtrue
+
+\def\appendix#1{
+	\ifappendices
+		\iffirstappendix
+			\setcounter{chapter}{0}
+			\setcounter{section}{0}
+			\def\@chapapp{Appendix}
+ 			\def\thechapter{\Alph{chapter}}
+			\addtocontents{toc}{Appendices}
+			\typeout{Appendices.}
+			\firstappendixfalse
+		\fi
+		\chapter{#1}
+	\else
+		\chapter*{Appendix: #1}
+		\addcontentsline{toc}{chapter}{Appendix: #1}
+		\typeout{Appendix.}
+	\fi 
+	}
+
+\def\enoteformat{\rightskip\z@ \leftskip\z@ \parindent=1.8em
+     \leavevmode\textindent{\@theenmark.}}
+\def\enotesize{\normalsize}
+\def\notesname{}
+
+\def\printendnotes{
+	\typeout{Endnotes for chapter \thechapter.}
+	\chapter*{Notes for Chapter \thechapter}
+	\addcontentsline{toc}{section}{Notes for Chapter \thechapter}
+	\begingroup
+		\parskip 2ex
+		\theendnotes
+	\endgroup
+	\setcounter{endnote}{0}
+}
+
+\def\printallendnotes{
+	\typeout{Endnotes.}
+	\chapter*{Notes}
+	\addcontentsline{toc}{chapter}{Notes}
+	\begingroup
+		\parskip 2ex
+		\theendnotes
+	\endgroup
+}
+\makeatother
+

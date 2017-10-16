@@ -1,0 +1,52 @@
+% my_lib.tex   My Library for LaTeX
+% 
+
+\newcommand{\sfrac}[2]{\genfrac{}{}{0.5pt}{1}{#1}{#2}}
+
+
+% change this if we want italic d's in dy/dx (see diff below)
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\di}{\partial}
+\newcommand{\bigoh}{\mathcal{O}}
+\newcommand{\diff}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdiff}[2]{\frac{\di #1}{\di #2}}
+\newcommand{\n}{\mathbf{n}}
+
+% allows me to change between blackboard and funky Q,C,R,N,Z
+\newcommand{\Complex}{\mathbb{C}}
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\Naturals}{\mathbb{N}}
+\newcommand{\Rationals}{\mathbb{Q}}
+\newcommand{\Integers}{\mathbb{Z}}
+
+\newcommand{\program}[1]{\textbf{#1}}
+\newcommand{\function}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\para}[1]{\texttt{#1}}
+% use these for the names of languages
+\newcommand{\fortran}{\texttt{FORTRAN}}
+\newcommand{\matlab}{\texttt{MATLAB}}
+\newcommand{\cpp}{\texttt{C++}}
+\newcommand{\perl}{\texttt{PERL}}
+
+\newcommand{\matlabtm}{\textsc{Matlab}}
+\newcommand{\octavetm}{\textsc{Octave}}
+\newcommand{\scilabtm}{\textsc{SciLab}}
+
+% scientific notation:
+\newcommand{\scin}[2]{$#1 \times 10^{#2}$}
+\newcommand{\scinm}[2]{#1 \times 10^{#2}}
+
+% this makes eqnarray not have funny spaces around the =
+%\setlength\arraycolsep{2pt}
+
+% using report without chapters...
+%\renewcommand{\thesection}{\arabic{section}}
+
+
+
+
+
+
+
+
