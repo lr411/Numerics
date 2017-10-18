@@ -1,15 +1,9 @@
-### Copy out most of this code. Code commented with 3#s (like this) ###
-### is here to help you to learn python and need not be copied      ###
+### File that contains initial condition functions ###
+### used for linear advection schemes ###
 
-### If you are using Python 2.7 rather than Python 3, import various###
-### functions from Python 3 such as to use real number division     ###
-### rather than integer division. ie 3/2  = 1.5  rather than 3/2 = 1###
-from __future__ import absolute_import, division, print_function
 
 ### The numpy package for numerical functions and pi                ###
-import numpy as np
-
-# Various different initial conditions for linear advection
+from numpy import *
 
 def squareWave(x,alpha,beta):
     "A square wave as a function of position, x, which is 1 between alpha"
@@ -17,7 +11,7 @@ def squareWave(x,alpha,beta):
     "that each phi contains the correct quantity integrated over a region"
     "a distance dx/2 either side of x"
     
-    phi = np.zeros_like(x)
+    phi = zeros_like(x)
     
     # The grid spacing (assumed uniform)
     dx = x[1] - x[0]
@@ -33,14 +27,14 @@ def squareWave(x,alpha,beta):
 
     return phi
 
-def cosineBasedFctn(x,alpha,beta):
+def cosineBasedFctn(x,alpha):
     "CosineBasedFctn is a function that we define as follows"
-    "f(x) = 0.5*(1-cos(4*pi*x)) for x<0.5"
+    "f(x) = 0.5*(1-cos(4*pi*x)) for x<alpha"
     "f(x) = 0     elsewhere"    
     
-    phi = np.zeros_like(x)
+    phi = zeros_like(x)
     
-    phi= where (x<0.5, 0.5*(1-cos(4*pi*x)), 0)
+    phi= where (x<alpha, 0.5*(1-cos(4*pi*x)), 0)
     
     return phi
 
