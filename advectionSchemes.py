@@ -1,6 +1,19 @@
 # Numerical schemes for simulating linear advection for outer code
 # linearAdvect.py
 
+'''
+# the following code is for debug purposes only
+
+from pylab import *
+import numpy as np
+
+nx=61
+nt=50
+c=0.4
+x=np.linspace(0,1,nx)
+'''
+
+
 def FTBS(phiOld, c, nt):
     
     "Linear advection scheme using FTBS, with Courant number c and"
@@ -28,4 +41,19 @@ def FTBS(phiOld, c, nt):
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
 
+
     return phi
+
+
+
+'''
+        # the following code is for debug purposes only
+
+        if it%8==0:
+         plot(x, phi)
+         #legend(loc='best')
+         axhline(0, linestyle=':', color='black')
+         plt.ylim([-0.2, 1.2])
+
+    show()
+'''

@@ -25,7 +25,8 @@ c=0.4
 x=np.linspace(0,1,nx)
 
 #take initial condition
-phiOld=ic.cosineBasedFctn(x, 0.5)
+#phiOld=ic.cosineBasedFctn(x, 0.5)
+phiOld=ic.squareWave(x, 0, 0.5)
 
 #Plot i.c.
 plt.clf()
@@ -45,4 +46,5 @@ plot(x, phi)
 axhline(0, linestyle=':', color='black')
 plt.ylim([-0.2, 1.2])
 show()
+
 
