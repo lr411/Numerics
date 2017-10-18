@@ -32,3 +32,15 @@ def squareWave(x,alpha,beta):
         phi[j] = max((min(beta, xe) - max(alpha, xw))/dx, 0)
 
     return phi
+
+def cosineBasedFctn(x,alpha,beta):
+    "CosineBasedFctn is a function that we define as follows"
+    "f(x) = 0.5*(1-cos(4*pi*x)) for x<0.5"
+    "f(x) = 0     elsewhere"    
+    
+    phi = np.zeros_like(x)
+    
+    phi= where (x<0.5, 0.5*(1-cos(4*pi*x)), 0)
+    
+    return phi
+
