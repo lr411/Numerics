@@ -27,10 +27,13 @@ def squareWave(x,alpha,beta):
 
     return phi
 
-def cosineBasedFctn(x,alpha):
+def cosineBasedFctn(x, alpha):
     "CosineBasedFctn is a function that we define as follows"
     "f(x) = 0.5*(1-cos(4*pi*x)) for x<alpha"
     "f(x) = 0     elsewhere"    
+    "Input parameters:"
+    "x: the x-axis vector"
+    "alpha: a constant used in the function definition (see above)"
     
     phi = zeros_like(x)
     

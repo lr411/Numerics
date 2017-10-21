@@ -8,9 +8,12 @@
 # linearAdvect.py : this file
 
 import numpy as np
+#from pylab import *
+
 
 import initialConditions as ic
 import advectionSchemes as ad
+
 
 # Nr of points in space
 nx=61
@@ -25,15 +28,21 @@ c=0.4
 x=np.linspace(0,1,nx)
 
 #take initial condition
-#phiOld=ic.cosineBasedFctn(x, 0.5)
-phiOld=ic.squareWave(x, 0, 0.5)
+phiOld=ic.cosineBasedFctn(x, 0.5)
+#phiOld=ic.squareWave(x, 0, 0.5)
+
+# in the linear adv eqn exact soln=initial condition shifted by lag
+lag=round(c*nt)
+
+# phiExact stores the exact solution
+phiExact=np.roll(phiOld, lag)
 
 #Plot i.c.
 plt.clf()
 plt.ion()
 
 
-plot(x, phiOld)
+plot(x, phiExact)
 axhline(0, linestyle=':', color='black')
 plt.ylim([-0.2, 1.2])
 
