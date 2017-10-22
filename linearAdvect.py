@@ -27,18 +27,23 @@ def main(nx, nt, c):
     x=np.linspace(0,1,nx)
 
     #take an initial condition from file initialConditions.py
-    #phiOld=ic.cosineBasedFctn(x, 0.5)
-    phiOld=ic.squareWave(x, 0, 0.5)
+    #phi_ic=ic.cosineBasedFctn(x, 0.5)
+    phi_ic=ic.squareWave(x, 0, 0.5)
 
     # in the linear adv eqn exact soln=initial condition shifted by lag
     lag=round(c*nt)
 
     # phiExact stores the exact solution phi(x-ut)
-    phiExact=np.roll(phiOld, lag)
+    phiExact=np.roll(phi_ic, lag)
+
+    # array to store means to check conservation of mass
+    means=zeros(3)
+    means[0]=mean(phi_ic)
+    means[1]=mean(phiExact)
 
     # calculate phi using some method taken from file advectionSchemes.py
-    #phi=ad.FTBS(phiOld, c, nt)
-    phi=ad.CTCS(phiOld, c, nt)
+    #phi=ad.FTBS(phi_ic, c, nt)
+    phi=ad.CTCS(phi_ic, c, nt)
 
     #Plot exact phi vs phi from our method
     plt.clf()
@@ -53,6 +58,16 @@ def main(nx, nt, c):
 
     show()
     
+    means[2]=mean(phi)
+
+    # plot of means
+    plt.plot(range(0,len(means)), means)
+    plt.title("Comparison of means:\n"\
+              "0) I.c.\n"\
+              "1) Exact soln\n"\
+              "2) Numerical method")
+    #plt.ylim([-0.01, 0.2])
+    
     return
 
 '''
@@ -66,5 +81,6 @@ def main(nx, nt, c):
    c=0.4
 '''
 main(61, 50, 0.4)
-main(300, 300, 0.4)
+#main(61, 50, 0.8)
+main(300, 200, 0.4)
 

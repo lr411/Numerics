@@ -22,8 +22,8 @@ def FTBS(phiOld, c, nt):
     "Linear advection scheme using FTBS, with Courant number c and"
     "                       nt time-steps"
     "inputs are:"
-    "phiOld: initial condition on phi (the array will then be used to"
-    "        store values from the previous time step)"
+    "phiOld: initial condition on phi (to save space the array will then"\
+    "               be used to store values from the previous time step)"
     "c: Courant number"
     "nt: nr of time steps"
     
@@ -31,7 +31,7 @@ def FTBS(phiOld, c, nt):
     nx=len(phiOld)
 
     # Init array with old data
-    phi=phiOld.copy()
+    phi=zeros(nx)
     
     # Start iterations
     for it in range(nt):
@@ -55,7 +55,8 @@ def CTCS(phi_ic, c, nt):
     "we will need two phi vectors to store data from previous two time steps"
     "the first time step needed for the method is computed using FTBS"
     "inputs are:"
-    "phi_ic: initial condition on phi"
+    "phi_ic: initial condition on phi  (to save space the array will then"\
+    "        be used to store values from the n-1 time step)"
     "c: Courant number"
     "nt: nr of time steps"
     
@@ -63,13 +64,13 @@ def CTCS(phi_ic, c, nt):
     nx=len(phi_ic)
 
     # Create future time step array and init to zero
-    phi_np1=zeros_like(phi_ic)
-    
-    # Create and init phi at time step -2
-    phi_nm1=phi_ic.copy()
+    phi_np1=zeros(nx)
     
     # Calculate array of previous time step doing 1 FTBS step from i.c.
     phi_n=FTBS(phi_ic, c, 1)
+    
+    # Change of name phi_ic becomes the vector where we store time step -2
+    phi_nm1=phi_ic
     
     # Now we have all the quantities we need to start
     
