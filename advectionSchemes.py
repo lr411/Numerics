@@ -1,6 +1,8 @@
 # Numerical schemes for simulating linear advection for outer code
 # linearAdvect.py
 
+from numpy import *
+
 '''
 # the following code is for debug purposes only
 
@@ -11,6 +13,8 @@ nx=61
 nt=50
 c=0.4
 x=np.linspace(0,1,nx)
+
+# end of code debug section
 '''
 
 
@@ -77,7 +81,7 @@ def CTCS(phi_ic, c, nt):
         
         # Now set periodic boundary conditions phi[0] and phi[nx-1]
         phi_np1[0]=phi_nm1[1]-c*(phi_n[1]-phi_n[nx-2])
-        phi_n[nx-1]=phi[0]
+        phi_np1[nx-1]=phi_np1[0]
 
         # Get phis ready for the next loop
         phi_nm1=phi_n.copy()
@@ -96,4 +100,5 @@ def CTCS(phi_ic, c, nt):
          plt.ylim([-0.2, 1.2])
 
     show()
+    # end of code debug section
 '''

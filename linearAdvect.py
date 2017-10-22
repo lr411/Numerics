@@ -15,45 +15,53 @@ import initialConditions as ic
 import advectionSchemes as ad
 
 
-# Nr of points in space
-nx=61
+def main(nx, nt, c):
+    "Analysis of linear advection equation using numerical schemes"
+    "                       taken from file advectionSchemes"
+    "inputs are:"
+    "nx: nr of steps on the x-axis"
+    "nt: nr of time steps"
+    "c: Courant number"
 
-# Nr of point in time domain
-nt=50
+    # initialize the vector of space points
+    x=np.linspace(0,1,nx)
 
-# Courant number
-c=0.4
+    #take initial condition from file initialConditions.py
+    #phiOld=ic.cosineBasedFctn(x, 0.5)
+    phiOld=ic.squareWave(x, 0, 0.5)
 
-# initialize the vector of space points
-x=np.linspace(0,1,nx)
+    # in the linear adv eqn exact soln=initial condition shifted by lag
+    lag=round(c*nt)
 
-#take initial condition
-phiOld=ic.cosineBasedFctn(x, 0.5)
-#phiOld=ic.squareWave(x, 0, 0.5)
+    # phiExact stores the exact solution phi(x-ut)
+    phiExact=np.roll(phiOld, lag)
 
-# in the linear adv eqn exact soln=initial condition shifted by lag
-lag=round(c*nt)
+    #Plot exact phi
+    plt.clf()
+    plt.ion()
 
-# phiExact stores the exact solution
-phiExact=np.roll(phiOld, lag)
+    plot(x, phiExact)
+    axhline(0, linestyle=':', color='black')
+    plt.ylim([-0.2, 1.2])
 
-#Plot i.c.
-plt.clf()
-plt.ion()
-
-
-plot(x, phiExact)
-axhline(0, linestyle=':', color='black')
-plt.ylim([-0.2, 1.2])
-
-
-phi=ad.FTBS(phiOld, c, nt)
+    # calculate phi using methods taken from file 
+    phi=ad.CTCS(phiOld, c, nt)
 
 
+    plot(x, phi)
+    axhline(0, linestyle=':', color='black')
+    plt.ylim([-0.2, 1.2])
+    show()
+    
+    return
 
-plot(x, phi)
-axhline(0, linestyle=':', color='black')
-plt.ylim([-0.2, 1.2])
-show()
+'''
+   # Nr of points in space
+   nx=61
 
+   # Nr of point in time domain
+   nt=50
 
+   # Courant number
+   c=0.4
+'''
