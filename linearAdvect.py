@@ -8,7 +8,7 @@
 # linearAdvect.py : this file
 
 import numpy as np
-#from pylab import *
+from pylab import *
 
 
 import initialConditions as ic
@@ -23,10 +23,10 @@ def main(nx, nt, c):
     "nt: nr of time steps"
     "c: Courant number"
 
-    # initialize the vector of space points
+    # initialize the vector of space points, our domain is [0,1]
     x=np.linspace(0,1,nx)
 
-    #take initial condition from file initialConditions.py
+    #take an initial condition from file initialConditions.py
     #phiOld=ic.cosineBasedFctn(x, 0.5)
     phiOld=ic.squareWave(x, 0, 0.5)
 
@@ -36,21 +36,21 @@ def main(nx, nt, c):
     # phiExact stores the exact solution phi(x-ut)
     phiExact=np.roll(phiOld, lag)
 
-    #Plot exact phi
-    plt.clf()
-    plt.ion()
-
-    plot(x, phiExact)
-    axhline(0, linestyle=':', color='black')
-    plt.ylim([-0.2, 1.2])
-
-    # calculate phi using methods taken from file 
+    # calculate phi using some method taken from file advectionSchemes.py
+    #phi=ad.FTBS(phiOld, c, nt)
     phi=ad.CTCS(phiOld, c, nt)
 
+    #Plot exact phi vs phi from our method
+    plt.clf()
+    plt.ion()
+    plt.plot(x, phiExact)
 
-    plot(x, phi)
-    axhline(0, linestyle=':', color='black')
-    plt.ylim([-0.2, 1.2])
+    plt.plot(x, phi)
+    plt.ylim([-0.2, 1.4])
+    plt.title("Exact vs Numerical solution after "+str(nt)+" time steps\n"\
+              "With "+str(nx)+" space points\n"
+              "Courant number: "+str(c))
+
     show()
     
     return
@@ -65,3 +65,6 @@ def main(nx, nt, c):
    # Courant number
    c=0.4
 '''
+main(61, 50, 0.4)
+main(300, 300, 0.4)
+
