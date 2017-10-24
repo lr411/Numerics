@@ -13,7 +13,7 @@ from pylab import *
 
 import initialConditions as ic
 import advectionSchemes as ad
-
+import diagnostics as dg
 
 def main(nx, nt, c):
     "Analysis of linear advection equation using numerical schemes"
@@ -27,11 +27,13 @@ def main(nx, nt, c):
     x=np.linspace(0,1,nx)
 
     #take an initial condition from file initialConditions.py
-    #phi_ic=ic.cosineBasedFctn(x, 0.5)
-    phi_ic=ic.squareWave(x, 0, 0.5)
+    phi_ic=ic.cosineBasedFctn(x, 0.5)
+    #phi_ic=ic.squareWave(x, 0, 0.5)
 
-    # in the linear adv eqn exact soln=initial condition shifted by lag
-    lag=round(c*nt)
+    # in the linear adv eqn exact soln=initial condition shifted by \
+    # c*nt*dx, therefore the shift in position in the array is c*nt \
+    # the quantity is converted to int as it is a position
+    lag=int(c*nt)
 
     # phiExact stores the exact solution phi(x-ut)
     phiExact=np.roll(phi_ic, lag)
@@ -66,21 +68,20 @@ def main(nx, nt, c):
               "0) I.c.\n"\
               "1) Exact soln\n"\
               "2) Numerical method")
-    #plt.ylim([-0.01, 0.2])
     
+    show()
+
+    # Calculate norm of error phi phiExact
+    norminf=dg.lInfErrorNorm(phi, phiExact)
+    norm2=dg.l2ErrorNorm(phi, phiExact)
+    
+    print("L2 error: "+str(norm2))
+    print("Linf error: "+str(norminf))
+
+
     return
 
-'''
-   # Nr of points in space
-   nx=61
-
-   # Nr of point in time domain
-   nt=50
-
-   # Courant number
-   c=0.4
-'''
+# call main from here, main(nx, nt, c)
 main(61, 50, 0.4)
-#main(61, 50, 0.8)
-main(300, 200, 0.4)
+#main(300, 100, 0.4)
 

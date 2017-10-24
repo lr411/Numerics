@@ -17,6 +17,9 @@ x=np.linspace(0,1,nx)
 # end of code debug section
 '''
 
+# vector of masses, currently here for debug only
+# masses=zeros(61)
+
 
 def FTBS(phiOld, c, nt):    
     "Linear advection scheme using FTBS, with Courant number c and"
@@ -44,6 +47,10 @@ def FTBS(phiOld, c, nt):
 
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
+        
+        
+        # check masses for conservation
+        # masses[it]=mean(phi)
 
 
     return phi
@@ -87,6 +94,9 @@ def CTCS(phi_ic, c, nt):
         # Get phis ready for the next loop
         phi_nm1=phi_n.copy()
         phi_n=phi_np1.copy()
+
+        # check masses for conservation
+        # masses[it]=mean(phi)
 
     return phi_np1
 
