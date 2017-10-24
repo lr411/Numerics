@@ -1,8 +1,12 @@
-# Various function for calculating error measures
+# =============================================================================
+# # Various function for calculating error measures
+# 
+# # file diagnostics.py
+# 
+# ### The numpy package for numerical functions and pi                ###
+# 
+# =============================================================================
 
-# file diagnostics.py
-
-### The numpy package for numerical functions and pi                ###
 import numpy as np
 
 

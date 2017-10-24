@@ -1,12 +1,25 @@
-#!/usr/bin/python
-
-# Numerical analysis for advection scheme
-# The following files are included
-# initialConditions.py : initial condition
-# advectionSchemes.py : functions with advection schemes: FTBS (naive, \
-#      used for comparisons)
-# linearAdvect.py : this file
-
+# =============================================================================
+# #!/usr/bin/python
+# 
+# # Numerical analysis for advection scheme
+# # The following files are included
+# # initialConditions.py : initial condition
+# # advectionSchemes.py : functions with advection schemes: FTBS (naive, \
+# #      used for comparisons)
+# # linearAdvect.py : this file
+# 
+# =============================================================================
+# =============================================================================
+#     at the moment two possible choices of i.c.:
+#     phi_ic=ic.cosineBasedFctn(x, 0.5)
+#     phi_ic=ic.squareWave(x, 0, 0.5)
+# 
+#     and two possible numerical schemes:
+#     #phi=ad.FTBS(phi_ic, c, nt)
+#     phi=ad.CTCS(phi_ic, c, nt)
+#         
+# =============================================================================
+    
 import numpy as np
 from pylab import *
 

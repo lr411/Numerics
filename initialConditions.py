@@ -1,8 +1,12 @@
-### File that contains initial condition functions ###
-### used for linear advection schemes ###
+# =============================================================================
+# ### File that contains initial condition functions ###
+# ### used for linear advection schemes ###
+# 
+# 
+# ### The numpy package for numerical functions and pi                ###
+# 
+# =============================================================================
 
-
-### The numpy package for numerical functions and pi                ###
 from numpy import *
 
 def squareWave(x,alpha,beta):

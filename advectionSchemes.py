@@ -1,6 +1,8 @@
-# Numerical schemes for simulating linear advection for outer code
-# linearAdvect.py
-
+# =============================================================================
+# # Numerical schemes for simulating linear advection for outer code
+# # linearAdvect.py
+# 
+# =============================================================================
 from numpy import *
 
 '''
