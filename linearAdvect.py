@@ -58,6 +58,7 @@ def main(nx, nt, c):
 
     # calculate phi using some method taken from file advectionSchemes.py
     #phi=ad.FTBS(phi_ic, c, nt)
+    #phi=ad.FTCS(phi_ic, c, nt)
     phi=ad.CTCS(phi_ic, c, nt)
 
     #Plot exact phi vs phi from our method
