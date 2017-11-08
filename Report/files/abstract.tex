@@ -1,3 +1,14 @@
 % Abstract goes here
 
-Swimming at the micrometer scale is characterized by negligible inertia and very high viscous damping, and therefore a low Reynolds number. In this thesis we develop some mathematical models capable of reproducing far-field behaviour of the flow produced by active particles that live at low Reynolds number. Models are constructed by using linear combinations of basic flow singularities, such as Stokeslets, Rotlets, Source Dipoles etcetera. Firstly, we develop a model for pushers/pullers, microswimmers whose flow field can, at first order, be approximated by an extensile/retractile force dipole respectively. The swimmer is modelled using two beads, modelling the effects of body and flagellum, connected by a spring having finite equilibrium length. A Stokeslet is applied to each bead. Secondly, a model of "rotor" swimmer is developed. Rotors are particles that rotate in the fluid in response to a torque: both pushers/pullers with rotor capabilities (active rotors), and particles that only rotate in response to an external torque (passive rotors) are considered \cite{active_passive_rotors}. Finally, a model of Chlamydomonas, a biflagellate alga, is presented. Several prior studies exist of Chlamydomonas, but our model captures the physics of the flow as shown by recent research papers: a three Stokeslet model has been used, as proposed by \cite{Drescher_Chlamydemonas}, with one Stokeslet applied to each flagellum, and one to the body. The motion of flagella reproduces the oscillatory flow shown in recent research papers \cite{Oscillatory_Guasto}.
+In this work we present the analysis of the linear advection equation modelled in one dimension, x, without sources or sinks of the advected variable $\phi$. The exact expression of the equation is:
+\begin{equation} \label{eq:linadvec}
+\phi_{t}+u\phi_{x}=0
+\end{equation}
+We consider the case of constant and uniform wind, u, and with given initial condition $\phi(x,0)=\phi_{0}$.
+It can be shown that the analytic solution of \ref{eq:linadvecq} is:
+\begin{equation} \label{eq:linadvec_initcondition}
+\phi(x,t)=\phi_{0}(x-ut)
+\end{equation}
+We have modelled equation \ref{eq:linadvecq} using several numerical schemes:
+
+used for its characteristic of higher order of convergence (2) compared\lessapprox
