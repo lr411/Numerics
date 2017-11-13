@@ -2,4 +2,5 @@
 *.gz
 *.toc
 *.log
-
+.DS_Store
+*.pyc
