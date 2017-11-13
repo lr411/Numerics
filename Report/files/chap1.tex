@@ -1,11 +1,23 @@
 %Chapter 1 FTBS method
 
-\chapter{FTBS}
+%\chapter{FTBS}
 
-The motion of an incompressible Newtonian fluid is governed by the Navier-Stokes Equations:
-\begin{align}
-\rho (\frac{\delta \textbf{u}}{\delta t}+\textbf{u}\nabla\textbf{u}) &=-\nabla P+\mu\nabla^2 \textbf{u} + \textbf{f}, \label{navstok} \\
-\nabla \cdot \textbf{u} &= 0,\label{conteq}
-\end{align}
-where $\mathbf{u}$ is the fluid velocity, $\rho$ and $\mu$ are the density and the viscosity of the fluid, and \textbf{f} a force applied on the fluid.
+
+The first method to be explored is FTBS. Characteristics of the method can be found in the book 
+
+The function used for the method is in the file advectionSchemes.py, and the function in the code is the following, with comments included on the meaning of inputs:
+\begin{lstlisting}
+def FTCS(phiOld, c, nt):    
+"Linear advection scheme using FTCS, with Courant number c and"
+"                       nt time-steps"
+"inputs are:"
+"phiOld: initial condition on phi (to save space the array will then"\
+"               be used to store values from the previous time step)"
+"c: Courant number"
+"nt: nr of time steps"
+\end{lstlisting}
+
+\section{General characteristics}
+We will explore the characteristics of the FTBS method, in terms of 
+
 

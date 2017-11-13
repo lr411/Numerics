@@ -17,6 +17,7 @@
 %% use this package to add color to LaTeX
 %\usepackage[dvips]{color}
 \usepackage{files/setspace}
+\usepackage{listings}
 
 %\doublespacing
 \onehalfspacing
@@ -140,13 +141,18 @@
 
 \prefacesection{Abstract}
 \input{files/abstract}
-\input{files/chap1}
-
 
 \afterpreface
 
 \onehalfspacing
 
+
+% *********************************************************************
+% THE CHAPTERS
+% *********************************************************************
+
+\chapter{FTBS}\label{chap:chap1}
+\input{files/chap1}
 
 
 \end{document}
