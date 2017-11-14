@@ -40,8 +40,8 @@ def main(nx, nt, c):
     x=np.linspace(0,1,nx)
 
     #take an initial condition from file initialConditions.py
-    phi_ic=ic.cosineBasedFctn(x, 0.5)
-    #phi_ic=ic.squareWave(x, 0, 0.5)
+    #phi_ic=ic.cosineBasedFctn(x, 0.5)
+    phi_ic=ic.squareWave(x, 0, 0.5)
 
     # in the linear adv eqn exact soln=initial condition shifted by \
     # c*nt*dx, therefore the shift in position in the array is c*nt \
@@ -57,9 +57,9 @@ def main(nx, nt, c):
     means[1]=mean(phiExact)
 
     # calculate phi using some method taken from file advectionSchemes.py
-    #phi=ad.FTBS(phi_ic, c, nt)
+    phi=ad.FTBS(phi_ic, c, nt)
     #phi=ad.FTCS(phi_ic, c, nt)
-    phi=ad.CTCS(phi_ic, c, nt)
+    #phi=ad.CTCS(phi_ic, c, nt)
 
     #Plot exact phi vs phi from our method
     plt.clf()
