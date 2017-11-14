@@ -1,6 +1,5 @@
-%Chapter 1 FTBS method
+%Chapter  FTBS method
 
-%\chapter{FTBS}
 
 The first method to be explored is FTBS. Characteristics of the method can be found in \cite{mpebook}.
 FTBS has been chosen as "naive" method to be compared to a more "sophisticathed" method and show the quantitative and qualitative differences.
@@ -33,6 +32,7 @@ We will explore the characteristics of the FTBS method. Unless otherwise stated,
 With reference to equation (\ref{eq:linadvec_initcondition}), the mass of $\phi$ is conserved under the linear advection in the exact solution and also in the FTBS numerical implementation, whereas the variance of $\phi$ is conserved only in the exact solution but not in the FTBS implementation. The variance decreases in FTBS, and this is consistent with what we will find in the subsection \ref{stabilityftbs}, that the method is damping.
 
 \subsection{Stability} \label{stabilityftbs}
+The FTBS method is stable for courant number $c\in[0,1]$
 
 \subsection{Accuracy}
 The FTBS method is first order accurate. We can see in figure \ref{fig:ftbsvsexact} a qualitative comparison of the output of FTBS scheme vs the exact solution, for initial condition (\ref{eq:initcondcos}).
@@ -43,6 +43,15 @@ The FTBS method is first order accurate. We can see in figure \ref{fig:ftbsvsexa
 	\caption[A comparison of FTBS vs exact solution.]{ \em A comparison of FTBS vs exact solution for initial condition (\ref{eq:initcondcos}). The blue line is the exact solution, the orange line is the output of the model}
 	\label{fig:ftbsvsexact}
 \end{figure}
+Error for the FTBS have be calculated using norms, the following are the results for $c=0.4$, $n_t=50$, $n_x=61$:
+\begin{equation}
+\mid\mid \phi_{FTBS} - \phi_{EXACT}\mid\mid_2=0.1223
+\label{eq:norm2ftbs}
+\end{equation}
+\begin{equation}
+\mid\mid \phi_{FTBS} - \phi_{EXACT}\mid\mid_{\infty}=0.1159
+\label{eq:norminfftbs}
+\end{equation}
 
 \subsection{Monotonicity}
 The FTBS is monotonic, it does not add new maxima, it can be seen qualitatively from figure \ref{fig:ftbsvsexact}.
@@ -55,7 +64,9 @@ The FTBS is monotonic, it does not add new maxima, it can be seen qualitatively 
 What are these??? I read they refer to nothing specifically, but in general to modes that can be either physical or coming from numerical implementations. Not sure I understood how to compute these.
 
 \subsection{Computational Cost}
-Details of the code used for computing the FTBS scheme can be found in \ref{chap:pythonimplementation}.
+Details of the code used for computing the FTBS scheme can be found in chapter \ref{chap:pythonimplementation}.
+
+Do we calculate the cost by memory consumption, time of execution..., and if so, do we do a qualitative analysis such as which order of magnitude these quantities are???
 
 \subsection{Variable resolution}
 What does this mean specifically???
