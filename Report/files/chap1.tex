@@ -8,10 +8,11 @@ FTBS has been chosen as "naive" method to be compared to a more "sophisticathed"
 \section{General characteristics}
 We will explore the characteristics of the FTBS method.
 
-\subsection{Conservation of mass}
-FTBS conservation properties are shown in paragraph 5.2.9 \cite{mpebook} and 4.7, 4.7.1 of \cite{nmnotes}. With reference to equation (\ref{eq:linadvec_initcondition}), the mass of $\phi$ is conserved under the linear advection in the exact solution and also in the FTBS numerical implementation, whereas the variance of $\phi$ is conserved in the exact solution but not in the FTBS scheme
+\subsection{Conservation of mass} \label{conservationftbs}
+FTBS conservation properties are shown in paragraph 5.2.9 \cite{mpebook} and 4.7, 4.7.1 of \cite{nmnotes}. With reference to equation (\ref{eq:linadvec_initcondition}), the mass of $\phi$ is conserved under the linear advection in the exact solution and also in the FTBS numerical implementation, whereas the variance of $\phi$ is conserved only in the exact solution but not in the FTBS implementation. The variance decreases in FTBS, and this is consistent with what we will find in the subsection \ref{stability}, that the method is damping.
 
-\subsection{Stability}
+\subsection{Stability} \label{stabilityftbs}
+
 
 \subsection{Accuracy}
 
@@ -27,20 +28,4 @@ What are these??? I read they refer to nothing specifically, but in general to m
 \subsection{Computational Cost}
 
 \subsection{Variable resolution}
-
-
-\section{Phyton code}
-The function used for the method is in the file advectionSchemes.py, and the function in the code is the following, with comments included on the meaning of inputs:
-\begin{lstlisting}
-def FTCS(phiOld, c, nt):    
-"Linear advection scheme using FTCS, with Courant number c and"
-"                       nt time-steps"
-"inputs are:"
-"phiOld: initial condition on phi (to save space the array will then"\
-"               be used to store values from the previous time step)"
-"c: Courant number"
-"nt: nr of time steps"
-\end{lstlisting}
-
-
 
