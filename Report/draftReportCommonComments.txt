@@ -1,0 +1,40 @@
+Many of the reports were very long. I am expecting the final report to be around 12 pages or less. Try to be concise.
+
+You need to provide enough information in your report so that someone else could reproduce your results with their code without looking at your code. Remember to define the initial and boundary conditions and all other independent inputs.
+
+No need to repeat material from the lecture notes or elsewhere. Cite external material instead. 
+
+Courant has a capital C.
+
+Proof read.
+
+Never use nt = int(T/dt)
+or similar. This is subject to rounding error and you are likely to get the wrong result.
+
+Do not include spaces in file names.
+
+If appropriate, always run with coarse resolution for a short duration. This has a number of advantages:
+a. Simulations are cheaper
+b. It is easier to sea what is happening at the grid-scale is plots of results.
+c. It is easier to distinguish between schemes. 
+d. It is easier to see where grid-scale oscillations are emanating from. 
+
+Have a look at exercise 5.6 of the lecture notes to help you to understand dispersion errors, dispersion relations and grid-scale oscillations. 
+
+Some of the reports were not structured well. I would advise a structure something like:
+
+1. Introduction
+What equation are you solving (give the equation), what schemes are you going to use and what numerical properties you will test. 
+
+2. Numerical Methods
+Give equations for the numerical methods that you are going to use, reason for using these methods and describe the numerical properties that you plan to test.
+
+3. Results
+3.1
+First, show results for all of your schemes in comparison to the analytic solution (if you have one) for a short simulation with coarse resolution using, perhaps, two sets of initial conditions.
+3.2
+Describe a numerical property that you are going to test and define an experiment designed to test if the schemes implemented have this property. State what results you expect, then present and discuss the results for all schemes.
+3.3
+Repeat 3.2 for a different numerical property and a different experiment. 
+
+4. Conclusions

@@ -1,0 +1,43 @@
+Good, concise report.
+
+Avoid file names with spaces in so that you can collaborate with people who use scripts to manipulate files.
+
+Your equation 1 is not correct. For a multi-dimensional equation, use notation that makes it clear that u is a vector (make it bold, like you have done for x). Also, you need to take the dot product between vector u and grad(phi).
+
+Avoid blank lines after equations in latex unless you want a new paragraph.
+
+In section 1 you might as well give the equation for the analytic solution.
+
+Section 2, typo "constucte".
+
+Your equation at the beginning of 2.1 makes it sound as if FTBS is the only explicit model. 
+
+You should clarify that eqn 3 is an approximation for dphidt at time n, position j and eqn 4 is an approximation for dphidx at time n, position j. 
+
+You do not know that FTBS will have large errors just because it is first-order accurate. All you know that the errors will converge to zero proportional to dx^1 and dt^1. But this doesn't tell you about the constant of proportionality.
+
+Cite the lecture notes for your statement that FTBS should conserve mass but note that exact conservation will only hold if you have periodic boundary conditions. 
+
+About FTCS, if a scheme is only stable for c=0, this means that it is unconditionally unstable which is useless. As you already know that FTCS is unconditionally unstable, it is not worth including in your comparison.
+
+CTCS does not look like an implicit method. Treatment of the first time-step does not change the time-stepping for the other time-steps. 
+
+You really need to chose a scheme that you think might work better that CTCS and FTBS in some aspect. These two are really the naive starting points. How about a scheme from chapter 6 of the lecture notes "Alternative Advection Schemes".
+
+Your sentence:
+"To determine if the schemes preserves mass, I simply calculate the area of the graphs and compare".
+is not clear. Remember that your report should make sense to someone who has not read the assignment sheet and has not read the lecture notes.
+
+Your section "Method" is unnecessary. In the introduction say what numerical properties you are going to investigate and combine your description of experiments with the results.
+
+Define your experiments in sufficient detail so that someone else could reproduce your results with their code and without looking at your code. You haven't, for example, defined what initial or boundary conditions you are using. 
+
+Define you experiments in full before you present results. State what is presented in figure 2 before you discuss the content. 
+
+You don't cite figure 1 in the text. I would say that it is un-necessary. Define the initial conditions using an equation instead. I would recommend comparing solutions for two different initial conditions.
+
+I would say that table 1 is unnecessary, especially with so many decimal places. It would be more helpful to plot error norms on a log-log scale as a function of dx (keeping c and the final time constant for all dx).
+
+Typo "FTSBS".
+
+You will need to do another experiment or two to demonstrate the properties of your schemes.
