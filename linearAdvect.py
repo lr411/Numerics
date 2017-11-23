@@ -1,3 +1,4 @@
+"""
 # =============================================================================
 # #!/usr/bin/python
 # 
@@ -19,7 +20,8 @@
 #     phi=ad.CTCS(phi_ic, c, nt)
 #         
 # =============================================================================
-    
+"""
+
 import numpy as np
 from pylab import *
 
@@ -29,12 +31,14 @@ import advectionSchemes as ad
 import diagnostics as dg
 
 def main(nx, nt, c):
-    "Analysis of linear advection equation using numerical schemes"
-    "                       taken from file advectionSchemes"
-    "inputs are:"
-    "nx: nr of steps on the x-axis"
-    "nt: nr of time steps"
-    "c: Courant number"
+    """
+    Analysis of linear advection equation using numerical schemes
+                           taken from file advectionSchemes
+    inputs are:
+    nx: nr of steps on the x-axis
+    nt: nr of time steps
+    c: Courant number
+    """
 
     # initialize the vector of space points, our domain is [0,1]
     x=np.linspace(0,1,nx)

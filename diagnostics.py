@@ -1,3 +1,4 @@
+"""
 # =============================================================================
 # # Various function for calculating error measures
 # 
@@ -6,13 +7,16 @@
 # ### The numpy package for numerical functions and pi                ###
 # 
 # =============================================================================
+"""
 
 import numpy as np
 
 
 def l2ErrorNorm(phi, phiExact):
-    "Calculates the l2 error norm (RMS error) of phi in comparison to"
-    "phiExact"
+    """
+    Calculates the l2 error norm (RMS error) of phi in comparison to
+    phiExact
+    """
     
     # calculate the error and the RMS error norm
     phiError = phi - phiExact
@@ -22,8 +26,11 @@ def l2ErrorNorm(phi, phiExact):
 
 
 def lInfErrorNorm(phi, phiExact):
-    "Calculates the linf error norm (maximum normalised error) in comparison"
-    "to phiExact"
+    """
+    Calculates the linf error norm (maximum normalised error) in comparison
+    to phiExact
+    """
+    
     phiError = phi - phiExact
     return np.max(np.abs(phiError))/np.max(np.abs(phiExact))
 

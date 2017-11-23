@@ -1,8 +1,10 @@
+"""
 # =============================================================================
 # # Numerical schemes for simulating linear advection for outer code
 # # linearAdvect.py
 # 
 # =============================================================================
+"""
 from numpy import *
 
 '''
@@ -24,13 +26,15 @@ x=np.linspace(0,1,nx)
 
 
 def FTBS(phiOld, c, nt):    
-    "Linear advection scheme using FTBS, with Courant number c and"
-    "                       nt time-steps"
-    "inputs are:"
-    "phiOld: initial condition on phi (to save space the array will then"\
-    "               be used to store values from the previous time step)"
-    "c: Courant number"
-    "nt: nr of time steps"
+    """
+    Linear advection scheme using FTBS, with Courant number c and
+                           nt time-steps
+    inputs are:
+    phiOld: initial condition on phi (to save space the array will then \
+                   be used to store values from the previous time step)
+    c: Courant number
+    nt: nr of time steps
+    """
     
     # Calculate nr of space points in our array
     nx=len(phiOld)
@@ -60,13 +64,15 @@ def FTBS(phiOld, c, nt):
 
 
 def FTCS(phiOld, c, nt):    
-    "Linear advection scheme using FTCS, with Courant number c and"
-    "                       nt time-steps"
-    "inputs are:"
-    "phiOld: initial condition on phi (to save space the array will then"\
-    "               be used to store values from the previous time step)"
-    "c: Courant number"
-    "nt: nr of time steps"
+    """
+    Linear advection scheme using FTCS, with Courant number c and
+                           nt time-steps
+    inputs are:
+    phiOld: initial condition on phi (to save space the array will then\
+                   be used to store values from the previous time step)
+    c: Courant number
+    nt: nr of time steps
+    """
     
     # Calculate nr of space points in our array
     nx=len(phiOld)
@@ -95,14 +101,16 @@ def FTCS(phiOld, c, nt):
     return phi
 
 def CTCS(phi_ic, c, nt):    
-    "Linear advection scheme using CTCS, with Courant number c and"
-    "                       nt time-steps"
-    "we will need two phi vectors to store data from previous two time steps"
-    "the first time step needed for the method is computed using FTBS"
-    "inputs are:"
-    "phi_ic: initial condition on phi"
-    "c: Courant number"
-    "nt: nr of time steps"
+    """
+    Linear advection scheme using CTCS, with Courant number c and
+                          nt time-steps
+    we will need two phi vectors to store data from previous two time steps
+    the first time step needed for the method is computed using FTBS
+    inputs are:
+    phi_ic: initial condition on phi
+    c: Courant number
+    nt: nr of time steps
+    """
     
     # Calculate nr of space points in our array
     nx=len(phi_ic)
