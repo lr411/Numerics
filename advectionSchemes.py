@@ -6,6 +6,7 @@
 # =============================================================================
 """
 from numpy import *
+from pylab import *
 
 '''
 # the following code is for debug purposes only
@@ -52,11 +53,11 @@ def LaxWendroff(phiOld, c, nt):
     for it in range(nt):
         # In the following inner loop ix will iterate 1 to nx-1 included
         for ix in range(1, nx-1):
-            phi[ix]=0.5*c*(c-1)*phiOld[ix+1] - (1-c**2)*phiOld[ix] + \
+            phi[ix]=0.5*c*(c-1)*phiOld[ix+1] + (1-(c**2))*phiOld[ix] + \
             0.5*c*(1+c)*phiOld[ix-1]
 
         #we apply periodic boundary conditions
-        phi[0]=0.5*c*(c-1)*phiOld[1] - (1-c**2)*phiOld[0] + \
+        phi[0]=0.5*c*(c-1)*phiOld[1] + (1-(c**2))*phiOld[0] + \
         0.5*c*(1+c)*phiOld[nx-2]
         phi[nx-1]=phi[0]
 
