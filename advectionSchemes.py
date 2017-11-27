@@ -29,6 +29,7 @@ def LaxWendroff(phiOld, c, nt):
     """
     Linear advection scheme using Lax Wendroff method,
     with Courant number c and nt time-steps
+    periodic boundary conditions are imposed.
     inputs are:
     phiOld (array of floats):
         initial condition on phi (to save space the array will then \
@@ -50,12 +51,14 @@ def LaxWendroff(phiOld, c, nt):
     # Start iterations
     for it in range(nt):
         # In the following inner loop ix will iterate 1 to nx-1 included
-        for ix in range(1, nx):
-            phi[ix]=phiOld[ix]-c*(phiOld[ix]-phiOld[ix-1])
+        for ix in range(1, nx-1):
+            phi[ix]=0.5*c*(c-1)*phiOld[ix+1] - (1-c**2)*phiOld[ix] + \
+            0.5*c*(1+c)*phiOld[ix-1]
 
         #we apply periodic boundary conditions
-        #phi[0]=phiOld[ix]-c*(phiOld[1]-phiOld[nx-2])
-        phi[0]=phi[nx-1]
+        phi[0]=0.5*c*(c-1)*phiOld[1] - (1-c**2)*phiOld[0] + \
+        0.5*c*(1+c)*phiOld[nx-2]
+        phi[nx-1]=phi[0]
 
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
@@ -72,6 +75,7 @@ def FTBS(phiOld, c, nt):
     """
     Linear advection scheme using FTBS, with Courant number c and
                            nt time-steps
+    periodic boundary conditions are imposed.
     inputs are:
     phiOld (array of floats):
         initial condition on phi (to save space the array will then \
@@ -115,6 +119,7 @@ def FTCS(phiOld, c, nt):
     """
     Linear advection scheme using FTCS, with Courant number c and
                            nt time-steps
+    periodic boundary conditions are imposed.
     WARNING: this scheme is only stable for c=0, therefore it is only used
              in this project to calculate the first time step of the
              CTCS method
@@ -143,7 +148,7 @@ def FTCS(phiOld, c, nt):
             phi[ix]=phiOld[ix]-c*0.5*(phiOld[ix+1]-phiOld[ix-1])
 
         #we apply periodic boundary conditions
-        phi[0]=phiOld[ix]-c*0.5*(phiOld[1]-phiOld[nx-2])
+        phi[0]=phiOld[0]-c*0.5*(phiOld[1]-phiOld[nx-2])
         phi[nx-1]=phi[0]
 
         # Get phiOld ready for the next loop
@@ -161,7 +166,8 @@ def CTCS(phi_ic, c, nt):
     Linear advection scheme using CTCS, with Courant number c and
                           nt time-steps
     we will need two phi vectors to store data from previous two time steps
-    the first time step needed for the method is computed using FTBS
+    the first time step needed for the method is computed using FTCS
+    periodic boundary conditions are imposed.
     inputs are:
     phi_ic (array of floats):
         initial condition on phi

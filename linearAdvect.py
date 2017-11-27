@@ -61,7 +61,7 @@ def main(nx, nt, c):
     means[1]=mean(phiExact)
 
     # calculate phi using some method taken from file advectionSchemes.py
-    phi=ad.FTBS(phi_ic, c, nt)
+    phi=ad.LaxWendroff(phi_ic, c, nt)
     #phi=ad.FTCS(phi_ic, c, nt)
     #phi=ad.CTCS(phi_ic, c, nt)
 
@@ -79,7 +79,9 @@ def main(nx, nt, c):
     show()
     
     means[2]=mean(phi)
-
+    
+    print(phi)
+    
     # plot of means
     plt.plot(range(0,len(means)), means)
     plt.title("Comparison of means:\n"\
