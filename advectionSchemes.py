@@ -47,7 +47,7 @@ def CNCS(phiIC, c, nt):
     """
     
     # Calculate nr of space points in our array
-    nx=len(phiOld)
+    nx=len(phiIC)
 
     # Change of name, phi will be the 
     phi=phiIC

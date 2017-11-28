@@ -23,11 +23,9 @@
 """
 
 import numpy as np
-from pylab import *
-# we import the sparse version of scpy as this will improve efficiency \
-# (the matrices we will use for this method are sparse)
-from scipy.sparse import spdiags
-from scipy.sparse.linalg import spsolve
+# the following is included because otherwise the first time I run\
+# the code gives an error
+import pylab as py
 
 
 import initialConditions as ic
@@ -48,8 +46,8 @@ def main(nx, nt, c):
     x=np.linspace(0,1,nx)
 
     #take an initial condition from file initialConditions.py
-    #phi_ic=ic.cosineBasedFctn(x, 0.5)
-    phi_ic=ic.squareWave(x, 0, 0.5)
+    phi_ic=ic.cosineBasedFctn(x, 0.5)
+    #phi_ic=ic.squareWave(x, 0, 0.5)
 
     # in the linear adv eqn exact soln=initial condition shifted by \
     # c*nt*dx, therefore the shift in position in the array is c*nt \
@@ -65,9 +63,10 @@ def main(nx, nt, c):
     means[1]=mean(phiExact)
 
     # calculate phi using some method taken from file advectionSchemes.py
-    phi=ad.LaxWendroff(phi_ic, c, nt)
+    #phi=ad.LaxWendroff(phi_ic, c, nt)
     #phi=ad.FTCS(phi_ic, c, nt)
     #phi=ad.CTCS(phi_ic, c, nt)
+    phi=ad.CNCS(phi_ic, c, nt)
 
     #Plot exact phi vs phi from our method
     plt.clf()
