@@ -49,9 +49,16 @@ def getExactSoln(phi_ic, c, nt):
     return phiExact
 
 
-def plotAllSchemes(x, phi_ic, nx, nt, c):
+def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     """
     """
+    # we initialise the errors vector to none, and then we will append data
+    # although it is slightly inefficient not to have the exact size
+    # of the error vector, it is a small inefficiency, since we will only
+    # run 4-5 schemes, but it's much more flexible and less error prone
+    # if we add more schemes
+    errors=None
+
     # calculate exact solution
     phiExact=getExactSoln(phi_ic, c, nt)
 
@@ -63,40 +70,54 @@ def plotAllSchemes(x, phi_ic, nx, nt, c):
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local=phi_ic.copy()
     phi,_=ad.FTBS(phi_ic_local, c, nt)
-    plotComparison(x, nt, nx, c, phi, phiExact, methodName)
+    if(display):
+       plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
     norm2=dg.l2ErrorNorm(phi, phiExact)
-    print("L2 error of "+methodName+": "+str(norm2))    
+    errors=np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2))    
     
     methodName="CTCS"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local=phi_ic.copy()
     phi,_=ad.CTCS(phi_ic_local, c, nt)
-    plotComparison(x, nt, nx, c, phi, phiExact, methodName)
+    if(display):
+       plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
     norm2=dg.l2ErrorNorm(phi, phiExact)
-    print("L2 error of "+methodName+": "+str(norm2))
+    errors=np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2))    
     
     methodName="CNCS"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local=phi_ic.copy()
     phi,_=ad.CNCS(phi_ic_local, c, nt)
-    plotComparison(x, nt, nx, c, phi, phiExact, methodName)
+    if(display):
+       plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
     norm2=dg.l2ErrorNorm(phi, phiExact)
-    print("L2 error of "+methodName+": "+str(norm2))
+    errors=np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2))    
     
     methodName="LaxWendroff"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local=phi_ic.copy()
     phi,_=ad.LaxWendroff(phi_ic_local, c, nt)
-    plotComparison(x, nt, nx, c, phi, phiExact, methodName)
+    if(display):
+       plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
     norm2=dg.l2ErrorNorm(phi, phiExact)
-    print("L2 error of "+methodName+": "+str(norm2))
+    errors=np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2)) 
+    
+    return errors
 
 
 def main(nx, nt, c):
@@ -114,15 +135,18 @@ def main(nx, nt, c):
 
     #first plot for a smooth function, all schemes
     phi_ic=ic.cosineBasedFctn(x, 0.5)    
-    plotAllSchemes(x, phi_ic, nx, nt, c)
+    _=runAllSchemes(x, phi_ic, nx, nt, c, True)
 
-    #then plot for square wave
+    #then plot for square wave, all schemes
     phi_ic=ic.squareWave(x, 0, 0.5)    
-    plotAllSchemes(x, phi_ic, nx, nt, c)
+    _=runAllSchemes(x, phi_ic, nx, nt, c, True)
 
     return
 
+#def checkOrderConvergence(nx, nt, c):
+    
+    
 # call main from here, main(nx, nt, c)
-main(200, 200, 2)
+main(200, 200, 0.4)
 #main(400, 400, 2)
 

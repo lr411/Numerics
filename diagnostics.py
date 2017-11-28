@@ -4,7 +4,6 @@
 # 
 # # file diagnostics.py
 # 
-# ### The numpy package for numerical functions and pi                ###
 # 
 # =============================================================================
 """
