@@ -29,15 +29,15 @@ x=np.linspace(0,1,nx)
 # masses=zeros(61)
 
 
-def CNCS(phiOld, c, nt):    
+def CNCS(phiIC, c, nt):    
     """
     Linear advection scheme Crank-Nikolson Centered in Space method,
     with Courant number c and nt time-steps
     periodic boundary conditions are imposed.
     inputs are:
-    phiOld (array of floats):
+    phiIC (array of floats):
         initial condition on phi (to save space the array will then \
-                   be used to store values from the previous time step)
+                   be used to store current time step values)
     c (float): Courant number
     nt (int): nr of time steps
 
@@ -49,17 +49,18 @@ def CNCS(phiOld, c, nt):
     # Calculate nr of space points in our array
     nx=len(phiOld)
 
-    # Crerate and init the output array of required size
-    phi=zeros(nx)
+    # Change of name, phi will be the 
+    phi=phiIC
     
     # the method is M*phi=Mold*phiOld
     # so we construct the M and Mold matrices
-    # ones on the main diagonal
+    # ones are on the main diagonal
     oneVect=ones(nx)
+    # c/4 or -c/4 appears on lower and upper diagonals
     c4vect=0.25*c*oneVect
     M=spdiags([-c4vect,oneVect,c4vect], [-1,0,1], nx, nx)
     Mold=spdiags([c4vect,oneVect,-c4vect], [-1,0,1], nx, nx)
-    # transform to sparse to access data
+    # transform to sparse format to access data
     M=M.tocsr()
     Mold=Mold.tocsr()
     # impose periodic boundary conditions
@@ -68,12 +69,10 @@ def CNCS(phiOld, c, nt):
     Mold[0,nx-1]=0.25*c
     M[nx-1,0]=-0.25*c
     
-    
+    # and go for it    
     # Start iterations
     for it in range(nt):
-        # In the following inner loop ix will iterate 1 to nx-1 included
-        
-        
+        phi=spsolve(M, Mold*phi)
 
     return phi
 
