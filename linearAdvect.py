@@ -48,6 +48,16 @@ def getExactSoln(phi_ic, c, nt):
     
     return phiExact
 
+def myAppend(arrayToProcess, valueToAppend):
+    if arrayToProcess==None:
+        arrayToProcess=[valueToAppend]
+    else:
+        if arrayToProcess[0]==None:
+           arrayToProcess[0]=valueToAppend
+        else:
+           arrayToProcess=np.append(arrayToProcess, valueToAppend)
+    
+    return arrayToProcess
 
 def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     """
@@ -57,7 +67,7 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # of the error vector, it is a small inefficiency, since we will only
     # run 4-5 schemes, but it's much more flexible and less error prone
     # if we add more schemes
-    errors=None
+    errors=[]
 
     # calculate exact solution
     phiExact=getExactSoln(phi_ic, c, nt)
@@ -145,8 +155,9 @@ def main(nx, nt, c):
 
 def runErrorTests(c, startNx, endNx, stepNx=1):
     
-    errorsArray=[None]
-    dxs=[None]
+    nrOfIterations=((endNx-startNx)/stepNx)+1
+    errorsArray=[]
+    dxs=[]
     iteration=0
 
     for currNx in range(startNx, endNx, stepNx):
@@ -154,15 +165,18 @@ def runErrorTests(c, startNx, endNx, stepNx=1):
         nt=nx
         # initialize the vector of space points, our domain is [0,1]
         x=np.linspace(0,1,nx)
-        dxs=np.append(x[1] - x[0])
+        dxs=np.append(dxs,x[1] - x[0])
         #to check convergence use smooth function
         phi_ic=ic.cosineBasedFctn(x, 0.5)
-        errorsArray=np.append(errorsArray,runAllSchemes(x, phi_ic, nx, nt, c))
+        errorsArray=np.append(errorsArray, runAllSchemes(x, phi_ic, nx, nt, c))
         iteration=iteration+1
     
+    # to check order of convergence we see the behaviour of log-log plots
+    dxLog=np.log10(dxs)
+    ErrorsLog=np.log10(errorsArray)
     
 # call main from here, main(nx, nt, c)
-main(50, 50, 0.4)
-main(400, 400,  0.4)
+#main(50, 50, 0.4)
+#main(400, 400,  0.4)
 runErrorTests(0.2, 50, 500, stepNx=50)
 
