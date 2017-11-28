@@ -44,12 +44,15 @@ def CNCS(phiIC, c, nt):
     output:
     phi (array of floats):
         vector containing the result of the scheme after nt time steps
+    phiMeans (array of floats):
+        vector containing the means of the output at every time step
+        used to check conservation of mass
     """
     
     # Calculate nr of space points in our array
     nx=len(phiIC)
 
-    # Change of name, phi will be the 
+    # Change of name, phi will be the current value array
     phi=phiIC
     
     # the method is M*phi=Mold*phiOld
@@ -69,12 +72,17 @@ def CNCS(phiIC, c, nt):
     Mold[0,nx-1]=0.25*c
     M[nx-1,0]=-0.25*c
     
+    # Create and initialize the vector of means
+    phiMeans=zeros(nt)
+    
     # and go for it    
     # Start iterations
     for it in range(nt):
-        phi=spsolve(M, Mold*phi)
+        phi=spsolve(M, Mold*phi)                
+        # calculate masse (means)
+        phiMeans[it]=mean(phi)
 
-    return phi
+    return phi,phiMeans
 
 
 def LaxWendroff(phiOld, c, nt):    
@@ -92,6 +100,9 @@ def LaxWendroff(phiOld, c, nt):
     output:
     phi (array of floats):
         vector containing the result of the scheme after nt time steps
+    phiMeans (array of floats):
+        vector containing the means of the output at every time step
+        used to check conservation of mass
     """
     
     # Calculate nr of space points in our array
@@ -99,6 +110,9 @@ def LaxWendroff(phiOld, c, nt):
 
     # Crerate and init the output array of required size
     phi=zeros(nx)
+    
+    # Create and initialize the vector of means
+    phiMeans=zeros(nt)
     
     # Start iterations
     for it in range(nt):
@@ -114,13 +128,12 @@ def LaxWendroff(phiOld, c, nt):
 
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
-        
-        
-        # check masses for conservation
-        # masses[it]=mean(phi)
+                
+        # calculate masse (means)
+        phiMeans[it]=mean(phi)
 
 
-    return phi
+    return phi,phiMeans
 
 
 def FTBS(phiOld, c, nt):    
@@ -138,6 +151,9 @@ def FTBS(phiOld, c, nt):
     output:
     phi (array of floats):
         vector containing the result of the scheme after nt time steps
+    phiMeans (array of floats):
+        vector containing the means of the output at every time step
+        used to check conservation of mass
     """
     
     # Calculate nr of space points in our array
@@ -146,6 +162,9 @@ def FTBS(phiOld, c, nt):
     # Crerate and init array of required size
     phi=zeros(nx)
     
+    # Create and initialize the vector of means
+    phiMeans=zeros(nt)
+
     # Start iterations
     for it in range(nt):
         # In the following inner loop ix will iterate 1 to nx-1 included
@@ -158,13 +177,12 @@ def FTBS(phiOld, c, nt):
 
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
-        
-        
-        # check masses for conservation
-        # masses[it]=mean(phi)
+                
+        # calculate masse (means)
+        phiMeans[it]=mean(phi)
 
 
-    return phi
+    return phi,phiMeans
 
 
 def FTCS(phiOld, c, nt):    
@@ -185,6 +203,9 @@ def FTCS(phiOld, c, nt):
     output:
     phi (array of floats):
         vector containing the result of the scheme after nt time steps
+    phiMeans (array of floats):
+        vector containing the means of the output at every time step
+        used to check conservation of mass
     """
     
     # Calculate nr of space points in our array
@@ -193,6 +214,9 @@ def FTCS(phiOld, c, nt):
     # Crerate and init array of required size
     phi=zeros(nx)
     
+    # Create and initialize the vector of means
+    phiMeans=zeros(nt)
+
     # Start iterations
     for it in range(nt):
         # In the following inner loop ix will iterate 1 to nx-1 included
@@ -206,12 +230,11 @@ def FTCS(phiOld, c, nt):
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
         
-        
-        # check masses for conservation
-        # masses[it]=mean(phi)
+        # calculate masse (means)
+        phiMeans[it]=mean(phi)
 
+    return phi,phiMeans
 
-    return phi
 
 def CTCS(phi_ic, c, nt):    
     """
@@ -229,6 +252,9 @@ def CTCS(phi_ic, c, nt):
     output:
     phi_np1 (array of floats):
         vector containing the result of the scheme after nt time steps
+    phiMeans (array of floats):
+        vector containing the means of the output at every time step
+        used to check conservation of mass
     """
     
     # Calculate nr of space points in our array
@@ -240,11 +266,14 @@ def CTCS(phi_ic, c, nt):
     # copy the initial condition into the n-1 array
     phi_nm1=phi_ic.copy()
 
+    # Create and initialize the vector of means
+    phiMeans=zeros(nt)
+
     # Calculate array of previous time step doing 1 FTCS step from i.c.
-    phi_n=FTCS(phi_ic, c, 1)
+    phi_n,phiMean1stStep=FTCS(phi_ic, c, 1)
     
-    # Change of name phi_ic becomes the vector where we store time step -2
-    #phi_nm1=phi_ic
+    # get the first mass
+    phiMeans[0] = phiMean1stStep[0]
     
     # Now we have all the quantities we need to start
     
@@ -265,7 +294,7 @@ def CTCS(phi_ic, c, nt):
         # check masses for conservation
         # masses[it]=mean(phi)
 
-    return phi_np1
+    return phi_np1,phiMeans
 
 
 '''

@@ -63,10 +63,10 @@ def main(nx, nt, c):
     means[1]=mean(phiExact)
 
     # calculate phi using some method taken from file advectionSchemes.py
-    #phi=ad.LaxWendroff(phi_ic, c, nt)
+    phi,phiNumMeans=ad.LaxWendroff(phi_ic, c, nt)
     #phi=ad.FTCS(phi_ic, c, nt)
     #phi=ad.CTCS(phi_ic, c, nt)
-    phi=ad.CNCS(phi_ic, c, nt)
+    #phi,phiNumMeans=ad.CNCS(phi_ic, c, nt)
 
     #Plot exact phi vs phi from our method
     plt.clf()
@@ -84,7 +84,7 @@ def main(nx, nt, c):
     means[2]=mean(phi)
     
     # plot of means
-    plt.plot(range(0,len(means)), means)
+    plt.plot(range(0,len(phiNumMeans)), phiNumMeans)
     plt.title("Comparison of means:\n"\
               "0) I.c.\n"\
               "1) Exact soln\n"\
