@@ -271,7 +271,7 @@ def CTCS(phi_ic, c, nt, calculateMean=False):
     phi_n,phiMean1stStep=FTCS(phi_ic, c, 1, calculateMean)
     
     if(calculateMean):
-        # calculate mass of first step
+        # store mass from first step
         phiMeans[0] = phiMean1stStep[0]
     
     # Now we have all the quantities we need to start
