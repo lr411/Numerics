@@ -129,7 +129,7 @@ def main(nx, nt, c):
     nt: nr of time steps
     c: Courant number
     """
-
+    
     # initialize the vector of space points, our domain is [0,1]
     x=np.linspace(0,1,nx)
 
@@ -140,13 +140,29 @@ def main(nx, nt, c):
     #then plot for square wave, all schemes
     phi_ic=ic.squareWave(x, 0, 0.5)    
     _=runAllSchemes(x, phi_ic, nx, nt, c, True)
-
+    
     return
 
-#def checkOrderConvergence(nx, nt, c):
+def runErrorTests(c, startNx, endNx, stepNx=1):
+    
+    errorsArray=[None]
+    dxs=[None]
+    iteration=0
+
+    for currNx in range(startNx, endNx, stepNx):
+        nx=currNx
+        nt=nx
+        # initialize the vector of space points, our domain is [0,1]
+        x=np.linspace(0,1,nx)
+        dxs=np.append(x[1] - x[0])
+        #to check convergence use smooth function
+        phi_ic=ic.cosineBasedFctn(x, 0.5)
+        errorsArray=np.append(errorsArray,runAllSchemes(x, phi_ic, nx, nt, c))
+        iteration=iteration+1
     
     
 # call main from here, main(nx, nt, c)
-main(200, 200, 0.4)
-#main(400, 400, 2)
+main(50, 50, 0.4)
+main(400, 400,  0.4)
+runErrorTests(0.2, 50, 500, stepNx=50)
 
