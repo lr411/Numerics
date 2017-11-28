@@ -55,7 +55,7 @@ def CNCS(phiIC, c, nt, calculateMean=False):
     M[0,nx-1]=-0.25*c
     M[nx-1,0]=0.25*c
     Mold[0,nx-1]=0.25*c
-    M[nx-1,0]=-0.25*c
+    Mold[nx-1,0]=-0.25*c
     
     # Create and initialize the vector of means
     phiMeans=zeros(nt)

@@ -123,5 +123,6 @@ def main(nx, nt, c):
     return
 
 # call main from here, main(nx, nt, c)
-main(50, 50, 0.4)
+main(200, 200, 2)
+#main(400, 400, 2)
 
