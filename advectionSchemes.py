@@ -54,30 +54,26 @@ def CNCS(phiOld, c, nt):
     
     # the method is M*phi=Mold*phiOld
     # so we construct the M and Mold matrices
-    # we need 1 on the diagonals of both matrices
+    # ones on the main diagonal
     oneVect=ones(nx)
-    M=spdiags([(-0.25*c) oneMatrix 0.25*c], [-1 0 1], nx, nx)
+    c4vect=0.25*c*oneVect
+    M=spdiags([-c4vect,oneVect,c4vect], [-1,0,1], nx, nx)
+    Mold=spdiags([c4vect,oneVect,-c4vect], [-1,0,1], nx, nx)
+    # transform to sparse to access data
+    M=M.tocsr()
+    Mold=Mold.tocsr()
+    # impose periodic boundary conditions
+    M[0,nx-1]=-0.25*c
+    M[nx-1,0]=0.25*c
+    Mold[0,nx-1]=0.25*c
+    M[nx-1,0]=-0.25*c
     
     
     # Start iterations
     for it in range(nt):
         # In the following inner loop ix will iterate 1 to nx-1 included
-        for ix in range(1, nx-1):
-            phi[ix]=0.5*c*(c-1)*phiOld[ix+1] + (1-(c**2))*phiOld[ix] + \
-            0.5*c*(1+c)*phiOld[ix-1]
-
-        #we apply periodic boundary conditions
-        phi[0]=0.5*c*(c-1)*phiOld[1] + (1-(c**2))*phiOld[0] + \
-        0.5*c*(1+c)*phiOld[nx-2]
-        phi[nx-1]=phi[0]
-
-        # Get phiOld ready for the next loop
-        phiOld=phi.copy()
         
         
-        # check masses for conservation
-        # masses[it]=mean(phi)
-
 
     return phi
 
