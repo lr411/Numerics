@@ -54,6 +54,7 @@ def plotAllSchemes(x, phi_ic, nx, nt, c):
     """
     # calculate exact solution
     phiExact=getExactSoln(phi_ic, c, nt)
+
     # now we run and plot some schemes together with the exact solution\
     # the name of the scheme is each time in the variable methodName
     
@@ -65,8 +66,7 @@ def plotAllSchemes(x, phi_ic, nx, nt, c):
     plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
     norm2=dg.l2ErrorNorm(phi, phiExact)
-    print("L2 error of "+methodName+": "+str(norm2))
-    
+    print("L2 error of "+methodName+": "+str(norm2))    
     
     methodName="CTCS"
     # make a local copy every time because things get dirty after use
@@ -87,7 +87,6 @@ def plotAllSchemes(x, phi_ic, nx, nt, c):
     # Calculate norm of error phi phiExact
     norm2=dg.l2ErrorNorm(phi, phiExact)
     print("L2 error of "+methodName+": "+str(norm2))
-
     
     methodName="LaxWendroff"
     # make a local copy every time because things get dirty after use
@@ -113,20 +112,13 @@ def main(nx, nt, c):
     # initialize the vector of space points, our domain is [0,1]
     x=np.linspace(0,1,nx)
 
-    #take an initial condition from file initialConditions.py
-    phi_ic=ic.cosineBasedFctn(x, 0.5)
-    
+    #first plot for a smooth function, all schemes
+    phi_ic=ic.cosineBasedFctn(x, 0.5)    
     plotAllSchemes(x, phi_ic, nx, nt, c)
 
-# =============================================================================
-#     # Calculate norm of error phi phiExact
-#     norminf=dg.lInfErrorNorm(phi, phiExact)
-#     norm2=dg.l2ErrorNorm(phi, phiExact)
-#     
-#     print("L2 error: "+str(norm2))
-#     print("Linf error: "+str(norminf))
-# 
-# =============================================================================
+    #then plot for square wave
+    phi_ic=ic.squareWave(x, 0, 0.5)    
+    plotAllSchemes(x, phi_ic, nx, nt, c)
 
     return
 
