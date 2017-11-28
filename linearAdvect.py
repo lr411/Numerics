@@ -24,6 +24,10 @@
 
 import numpy as np
 from pylab import *
+# we import the sparse version of scpy as this will improve efficiency \
+# (the matrices we will use for this method are sparse)
+from scipy.sparse import spdiags
+from scipy.sparse.linalg import spsolve
 
 
 import initialConditions as ic

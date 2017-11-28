@@ -6,7 +6,10 @@
 # =============================================================================
 """
 from numpy import *
-from pylab import *
+# we import the sparse version of scpy as this will improve efficiency \
+# (the matrices we will use for this method are sparse)
+from scipy.sparse import spdiags
+from scipy.sparse.linalg import spsolve
 
 '''
 # the following code is for debug purposes only
@@ -24,6 +27,59 @@ x=np.linspace(0,1,nx)
 
 # vector of masses, currently here for debug only
 # masses=zeros(61)
+
+
+def CNCS(phiOld, c, nt):    
+    """
+    Linear advection scheme Crank-Nikolson Centered in Space method,
+    with Courant number c and nt time-steps
+    periodic boundary conditions are imposed.
+    inputs are:
+    phiOld (array of floats):
+        initial condition on phi (to save space the array will then \
+                   be used to store values from the previous time step)
+    c (float): Courant number
+    nt (int): nr of time steps
+
+    output:
+    phi (array of floats):
+        vector containing the result of the scheme after nt time steps
+    """
+    
+    # Calculate nr of space points in our array
+    nx=len(phiOld)
+
+    # Crerate and init the output array of required size
+    phi=zeros(nx)
+    
+    # the method is M*phi=Mold*phiOld
+    # so we construct the M and Mold matrices
+    # we need 1 on the diagonals of both matrices
+    oneVect=ones(nx)
+    M=spdiags([(-0.25*c) oneMatrix 0.25*c], [-1 0 1], nx, nx)
+    
+    
+    # Start iterations
+    for it in range(nt):
+        # In the following inner loop ix will iterate 1 to nx-1 included
+        for ix in range(1, nx-1):
+            phi[ix]=0.5*c*(c-1)*phiOld[ix+1] + (1-(c**2))*phiOld[ix] + \
+            0.5*c*(1+c)*phiOld[ix-1]
+
+        #we apply periodic boundary conditions
+        phi[0]=0.5*c*(c-1)*phiOld[1] + (1-(c**2))*phiOld[0] + \
+        0.5*c*(1+c)*phiOld[nx-2]
+        phi[nx-1]=phi[0]
+
+        # Get phiOld ready for the next loop
+        phiOld=phi.copy()
+        
+        
+        # check masses for conservation
+        # masses[it]=mean(phi)
+
+
+    return phi
 
 
 def LaxWendroff(phiOld, c, nt):    
