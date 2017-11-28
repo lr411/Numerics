@@ -11,25 +11,8 @@ from numpy import *
 from scipy.sparse import spdiags
 from scipy.sparse.linalg import spsolve
 
-'''
-# the following code is for debug purposes only
 
-from pylab import *
-import numpy as np
-
-nx=61
-nt=50
-c=0.4
-x=np.linspace(0,1,nx)
-
-# end of code debug section
-'''
-
-# vector of masses, currently here for debug only
-# masses=zeros(61)
-
-
-def CNCS(phiIC, c, nt):    
+def CNCS(phiIC, c, nt, calculateMean=False):    
     """
     Linear advection scheme Crank-Nikolson Centered in Space method,
     with Courant number c and nt time-steps
@@ -40,6 +23,8 @@ def CNCS(phiIC, c, nt):
                    be used to store current time step values)
     c (float): Courant number
     nt (int): nr of time steps
+    calculateMean (bool default=False): calculate/not calculate the mean \
+        at each time step: if False a zero-filled vector is returned
 
     output:
     phi (array of floats):
@@ -79,13 +64,15 @@ def CNCS(phiIC, c, nt):
     # Start iterations
     for it in range(nt):
         phi=spsolve(M, Mold*phi)                
-        # calculate masse (means)
-        phiMeans[it]=mean(phi)
+        
+        if(calculateMean):
+           # calculate mass (means)
+           phiMeans[it]=mean(phi)
 
     return phi,phiMeans
 
 
-def LaxWendroff(phiOld, c, nt):    
+def LaxWendroff(phiOld, c, nt, calculateMean=False):   
     """
     Linear advection scheme using Lax Wendroff method,
     with Courant number c and nt time-steps
@@ -96,6 +83,8 @@ def LaxWendroff(phiOld, c, nt):
                    be used to store values from the previous time step)
     c (float): Courant number
     nt (int): nr of time steps
+    calculateMean (bool default=False): calculate/not calculate the mean \
+        at each time step: if False a zero-filled vector is returned
 
     output:
     phi (array of floats):
@@ -129,14 +118,15 @@ def LaxWendroff(phiOld, c, nt):
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
                 
-        # calculate masse (means)
-        phiMeans[it]=mean(phi)
+        if(calculateMean):
+           # calculate mass (means)
+           phiMeans[it]=mean(phi)
 
 
     return phi,phiMeans
 
 
-def FTBS(phiOld, c, nt):    
+def FTBS(phiOld, c, nt, calculateMean=False):     
     """
     Linear advection scheme using FTBS, with Courant number c and
                            nt time-steps
@@ -147,6 +137,8 @@ def FTBS(phiOld, c, nt):
                    be used to store values from the previous time step)
     c (float): Courant number
     nt (int): nr of time steps
+    calculateMean (bool default=False): calculate/not calculate the mean \
+        at each time step: if False a zero-filled vector is returned
 
     output:
     phi (array of floats):
@@ -178,14 +170,15 @@ def FTBS(phiOld, c, nt):
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
                 
-        # calculate masse (means)
-        phiMeans[it]=mean(phi)
+        if(calculateMean):
+           # calculate mass (means)
+           phiMeans[it]=mean(phi)
 
 
     return phi,phiMeans
 
 
-def FTCS(phiOld, c, nt):    
+def FTCS(phiOld, c, nt, calculateMean=False):    
     """
     Linear advection scheme using FTCS, with Courant number c and
                            nt time-steps
@@ -199,6 +192,8 @@ def FTCS(phiOld, c, nt):
                    be used to store values from the previous time step)
     c (float): Courant number
     nt (int): nr of time steps
+    calculateMean (bool default=False): calculate/not calculate the mean \
+        at each time step: if False a zero-filled vector is returned
 
     output:
     phi (array of floats):
@@ -230,13 +225,14 @@ def FTCS(phiOld, c, nt):
         # Get phiOld ready for the next loop
         phiOld=phi.copy()
         
-        # calculate masse (means)
-        phiMeans[it]=mean(phi)
+        if(calculateMean):
+           # calculate mass (means)
+           phiMeans[it]=mean(phi)
 
     return phi,phiMeans
 
 
-def CTCS(phi_ic, c, nt):    
+def CTCS(phi_ic, c, nt, calculateMean=False):    
     """
     Linear advection scheme using CTCS, with Courant number c and
                           nt time-steps
@@ -248,6 +244,8 @@ def CTCS(phi_ic, c, nt):
         initial condition on phi
     c (float): Courant number
     nt (int): nr of time steps
+    calculateMean (bool default=False): calculate/not calculate the mean \
+        at each time step: if False a zero-filled vector is returned
 
     output:
     phi_np1 (array of floats):
@@ -270,10 +268,11 @@ def CTCS(phi_ic, c, nt):
     phiMeans=zeros(nt)
 
     # Calculate array of previous time step doing 1 FTCS step from i.c.
-    phi_n,phiMean1stStep=FTCS(phi_ic, c, 1)
+    phi_n,phiMean1stStep=FTCS(phi_ic, c, 1, calculateMean)
     
-    # get the first mass
-    phiMeans[0] = phiMean1stStep[0]
+    if(calculateMean):
+        # calculate mass of first step
+        phiMeans[0] = phiMean1stStep[0]
     
     # Now we have all the quantities we need to start
     
@@ -291,8 +290,9 @@ def CTCS(phi_ic, c, nt):
         phi_nm1=phi_n.copy()
         phi_n=phi_np1.copy()
 
-        # check masses for conservation
-        # masses[it]=mean(phi)
+        if(calculateMean):
+           # calculate mass (means)
+           phiMeans[it]=mean(phi)
 
     return phi_np1,phiMeans
 

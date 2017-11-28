@@ -4,12 +4,17 @@
 # ### used for linear advection schemes ###
 # 
 # 
-# ### The numpy package for numerical functions and pi                ###
-# 
 # =============================================================================
 """
 
-from numpy import *
+import numpy as np
+from scipy import signal
+
+def gaussianFctn(x, mu, sigma):
+    #phi=(1/(np.pi.sqrt(2*np.pi)*s))*e**(-0.5*((x-mm)/sigma)**2)
+    #phi=1./(np.sqrt(2**np.pi))*np.exp(-0.5*np.power((x - mu), 2.))
+    return np.zeros_like(x)
+
 
 def squareWave(x,alpha,beta):
     """A square wave as a function of position, x, which is 1 between alpha
@@ -18,7 +23,7 @@ def squareWave(x,alpha,beta):
     a distance dx/2 either side of x
     """
     
-    phi = zeros_like(x)
+    phi = np.zeros_like(x)
     
     # The grid spacing (assumed uniform)
     dx = x[1] - x[0]
@@ -44,9 +49,9 @@ def cosineBasedFctn(x, alpha):
     alpha: a constant used in the function definition (see above)
     """
     
-    phi = zeros_like(x)
+    phi = np.zeros_like(x)
     
-    phi= where (x<alpha, 0.5*(1-cos(4*pi*x)), 0)
+    phi= np.where (x<alpha, 0.5*(1-np.cos(4*np.pi*x)), 0)
     
     return phi
 
