@@ -175,12 +175,15 @@ def runErrorTests(c, startNx, endNx, stepNx=1):
     # to check order of convergence we see the behaviour of log-log plots
     dxLog=np.where(dxs>0, np.log10(dxs), 0)
     ErrorsLog=np.where(errorsArray>0, np.log10(errorsArray), 0)
+    dxLogArray=np.array([[dxLog],]*iteration)
 
     ErrorsLog=ErrorsLog.reshape(iteration, len(errline))
-    
-    print(ErrorsLog)
-    print("a")
-    print(ErrorsLog[0])
+    print(dxLogArray[0])
+    plt.figure()
+    plt.plot(dxLog, ErrorsLog)
+    show()
+    pol=np.polyfit(dxLog,ErrorsLog,1)
+    print(pol)
     
 # call main from here, main(nx, nt, c)
 #main(50, 50, 0.4)
