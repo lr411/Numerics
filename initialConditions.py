@@ -8,13 +8,6 @@
 """
 
 import numpy as np
-from scipy import signal
-
-def gaussianFctn(x, mu, sigma):
-    #phi=(1/(np.pi.sqrt(2*np.pi)*s))*e**(-0.5*((x-mm)/sigma)**2)
-    #phi=1./(np.sqrt(2**np.pi))*np.exp(-0.5*np.power((x - mu), 2.))
-    return np.zeros_like(x)
-
 
 def squareWave(x,alpha,beta):
     """A square wave as a function of position, x, which is 1 between alpha
