@@ -152,8 +152,9 @@ def main(nx, nt, c):
     _=runAllSchemes(x, phi_ic, nx, nt, c, True)
     
     return
+import matplotlib.patches as mpatches
 
-def runErrorTests(c, startNx, endNx, stepNx=1):
+def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     
     nrOfIterations=((endNx-startNx)/stepNx)+1
     errorsArray=[]
@@ -177,16 +178,24 @@ def runErrorTests(c, startNx, endNx, stepNx=1):
     ErrorsLog=np.where(errorsArray>0, np.log10(errorsArray), 0)
     ErrorsLog=ErrorsLog.reshape(iteration, len(errline))    
     ErrorsLog=np.matrix.transpose(ErrorsLog)
+    
     dxLogArray=np.array([dxLog,]*iteration)
-    plt.figure()
-    plt.plot(dxLog, ErrorsLog[1])
-    show()
-    coeff=np.polyfit(dxLog,ErrorsLog[1],1)
-    pol=np.poly1d(coeff)
-    print(pol)
-    print(coeff)
+    if(display):
+       methods=["FTBS", "CTCS", "CNCS", "LaxWendroff"]
+       patchesColour=['red', 'blue', 'black', 'purple']
+       #plt.figure()
+       for i in range (0, iteration):
+           patch = mpatches.Patch(color=patchesColour[i], label=methods[i])
+           plt.legend(handles=[patch])
+           plt.plot(dxLog, ErrorsLog[i])
+       show()
+    
+    coeff=np.polyfit(dxLog,ErrorsLog,1)
+    #pol=np.poly1d(coeff)
+    #print(pol)
+    #print(coeff)
+
 # call main from here, main(nx, nt, c)
 #main(50, 50, 0.4)
 #main(400, 400,  0.4)
-runErrorTests(0.2, 50, 500, stepNx=50)
-
+runErrorTests(0.2, 50, 500, stepNx=50, display=True)
