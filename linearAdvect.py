@@ -10,8 +10,10 @@
 # # linearAdvect.py : this file
 #         
 # We assume that time t varies in [0,1] and x varies in [0,1]        
-#         
-#         
+# This file, when launched, calls the routine main twice,
+# running the numerical schemes and plotting the results vs the exact
+# solution, for two different time steps.
+# Then the order of convergence is checked calling the routine runErrorTests        
 # =============================================================================
 """
 
@@ -26,7 +28,21 @@ import advectionSchemes as ad
 import diagnostics as dg
 
 def plotComparison(x, nt, nx, c, phi, phiExact, methodName):
-    #Plot exact phi vs phi from any method described with name methodName
+    """
+    Plot exact phi vs phi from any method described with name methodName
+    inputs are:
+    x (vector of float): vector of x-axis values
+    nt (int): nr of time steps
+    nx (int): nr of space points
+    c (float): Courant number
+    phi (array of floats): numerical scheme solution
+    phiExact (array of floats): exact solution
+    methodName (string): string containing the method name
+
+    output:
+    phiExact (array of floats): exact solution after nt time steps 
+    """
+    
     plt.figure()
     plt.plot(x, phiExact)
 
@@ -39,13 +55,18 @@ def plotComparison(x, nt, nx, c, phi, phiExact, methodName):
 
 def getExactSoln(phi_ic, c, nt):
     """
-    # in the linear adv eqn exact soln=initial condition shifted by \
-    # c*nt*dx, therefore the shift in position in the array is c*nt \
-    # the quantity is converted to int as it is a position
+    in the linear adv eqn exact soln=initial condition shifted by \
+    c*nt*dx, therefore the shift in position in the array is c*nt \
+    the quantity is converted to int as it is a position
     This routine returns the exact solution, given the i.c.
-    
-    
-    """"
+    inputs are:
+    phi_ic (array of floats): initial condition on phi
+    c (float): Courant number
+    nt (int): nr of time steps
+
+    output:
+    phiExact (array of floats): exact solution after nt time steps 
+    """
     
     lag=int(c*nt)
 
@@ -66,8 +87,7 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     
     inputs are:
     x (vector of float): vector of x-axis values
-    phi_ic (array of floats):
-        initial condition on phi
+    phi_ic (array of floats): initial condition on phi
     nx (int): nr of space points
     nt (int): nr of time steps
     c (float): Courant number
@@ -234,7 +254,7 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     
 
 # call main from here, main(nx, nt, c)
-#main(50, 50, 0.4)
-#main(400, 400,  0.4)
+main(50, 50, 0.4)
+main(400, 400,  0.4)
 # run order of convergence tests
 runErrorTests(0.2, 50, 500, stepNx=50, display=True)
