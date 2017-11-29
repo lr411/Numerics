@@ -152,7 +152,7 @@ def main(nx, nt, c):
     _=runAllSchemes(x, phi_ic, nx, nt, c, True)
     
     return
-import matplotlib.patches as mpatches
+
 
 def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     
@@ -179,19 +179,18 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     ErrorsLog=ErrorsLog.reshape(iteration, len(errline))    
     ErrorsLog=np.matrix.transpose(ErrorsLog)
     dxLogArray=np.array([dxLog,]*iteration)
-    print(iteration)
+    methods=["FTBS", "CTCS", "CNCS", "LaxWendroff"]
     if(display):
-       methods=["FTBS", "CTCS", "CNCS", "LaxWendroff"]
-       #plt.figure()
        for i in range (0, 4):
            plt.plot(dxLog, ErrorsLog[i], label=methods[i])
+           coeff=np.polyfit(dxLog,ErrorsLog[i],1)
+           polynomial = np.poly1d(coeff)
+           print("Estimated order of convergence for "+methods[i]+\
+                ": "+str(coeff[0]))
+       plt.title("Log-log plot of L2 errors vs dx")
        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
        show()
     
-    coeff=np.polyfit(dxLog,ErrorsLog[0],1)
-    #pol=np.poly1d(coeff)
-    #print(pol)
-    #print(coeff)
 
 # call main from here, main(nx, nt, c)
 #main(50, 50, 0.4)
