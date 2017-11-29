@@ -256,5 +256,6 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
 # call main from here, main(nx, nt, c)
 main(50, 50, 0.4)
 main(400, 400,  0.4)
+print("\n")
 # run order of convergence tests
 runErrorTests(0.2, 50, 500, stepNx=50, display=True)

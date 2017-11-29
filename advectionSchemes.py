@@ -94,6 +94,8 @@ def LaxWendroff(phiOld, c, nt, calculateMean=False):
         used to check conservation of mass
     """
     
+    assert c>=-1 and c<=1, "Warning: the method is unstable"
+
     # Calculate nr of space points in our array
     nx=len(phiOld)
 
@@ -147,6 +149,8 @@ def FTBS(phiOld, c, nt, calculateMean=False):
         vector containing the means of the output at every time step
         used to check conservation of mass
     """
+    
+    assert c>=0 and c<=1, "Warning: the method is unstable"
     
     # Calculate nr of space points in our array
     nx=len(phiOld)
@@ -203,6 +207,10 @@ def FTCS(phiOld, c, nt, calculateMean=False):
         used to check conservation of mass
     """
     
+    # if the method is run only for 1 time step (done for CTCS) 
+    # we are still ok
+    assert c==0 or nt==1, "Warning: the method is unstable"
+
     # Calculate nr of space points in our array
     nx=len(phiOld)
 
@@ -255,6 +263,7 @@ def CTCS(phi_ic, c, nt, calculateMean=False):
         used to check conservation of mass
     """
     
+    assert c>=-1 and c<=1, "Warning: the method is unstable"
     # Calculate nr of space points in our array
     nx=len(phi_ic)
 
@@ -296,16 +305,3 @@ def CTCS(phi_ic, c, nt, calculateMean=False):
 
     return phi_np1,phiMeans
 
-
-'''
-        # the following code is for debug purposes only
-
-        if it%8==0:
-         plot(x, phi)
-         #legend(loc='best')
-         axhline(0, linestyle=':', color='black')
-         plt.ylim([-0.2, 1.2])
-
-    show()
-    # end of code debug section
-'''
