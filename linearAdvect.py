@@ -157,7 +157,7 @@ def runErrorTests(c, startNx, endNx, stepNx=1):
     
     nrOfIterations=((endNx-startNx)/stepNx)+1
     errorsArray=[]
-    dxs=[]
+    dxs=np.empty(shape=[0])
     iteration=0
 
     for currNx in range(startNx, endNx, stepNx):
@@ -168,12 +168,19 @@ def runErrorTests(c, startNx, endNx, stepNx=1):
         dxs=np.append(dxs,x[1] - x[0])
         #to check convergence use smooth function
         phi_ic=ic.cosineBasedFctn(x, 0.5)
-        errorsArray=np.append(errorsArray, runAllSchemes(x, phi_ic, nx, nt, c))
+        errline=runAllSchemes(x, phi_ic, nx, nt, c)
+        errorsArray=np.append(errorsArray, errline)
         iteration=iteration+1
     
     # to check order of convergence we see the behaviour of log-log plots
-    dxLog=np.log10(dxs)
-    ErrorsLog=np.log10(errorsArray)
+    dxLog=np.where(dxs>0, np.log10(dxs), 0)
+    ErrorsLog=np.where(errorsArray>0, np.log10(errorsArray), 0)
+
+    ErrorsLog=ErrorsLog.reshape(iteration, len(errline))
+    
+    print(ErrorsLog)
+    print("a")
+    print(ErrorsLog[0])
     
 # call main from here, main(nx, nt, c)
 #main(50, 50, 0.4)
