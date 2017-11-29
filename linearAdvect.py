@@ -178,19 +178,17 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     ErrorsLog=np.where(errorsArray>0, np.log10(errorsArray), 0)
     ErrorsLog=ErrorsLog.reshape(iteration, len(errline))    
     ErrorsLog=np.matrix.transpose(ErrorsLog)
-    
     dxLogArray=np.array([dxLog,]*iteration)
+    print(iteration)
     if(display):
        methods=["FTBS", "CTCS", "CNCS", "LaxWendroff"]
-       patchesColour=['red', 'blue', 'black', 'purple']
        #plt.figure()
-       for i in range (0, iteration):
-           patch = mpatches.Patch(color=patchesColour[i], label=methods[i])
-           plt.legend(handles=[patch])
-           plt.plot(dxLog, ErrorsLog[i])
+       for i in range (0, 4):
+           plt.plot(dxLog, ErrorsLog[i], label=methods[i])
+       plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
        show()
     
-    coeff=np.polyfit(dxLog,ErrorsLog,1)
+    coeff=np.polyfit(dxLog,ErrorsLog[0],1)
     #pol=np.poly1d(coeff)
     #print(pol)
     #print(coeff)
