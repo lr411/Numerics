@@ -68,10 +68,10 @@ def getExactSoln(phi_ic, c, nt):
     phiExact (array of floats): exact solution after nt time steps 
     """
     
-    lag=int(c*nt)
+    lag = int(c*nt)
 
     # phiExact stores the exact solution phi(x-ut)
-    phiExact=np.roll(phi_ic, lag)
+    phiExact = np.roll(phi_ic, lag)
     
     return phiExact
 
@@ -103,63 +103,63 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # of the error vector, it is a small inefficiency, since we will only
     # run 4-5 schemes, but it's much more flexible and less error prone
     # if we add more schemes
-    errors=[]
+    errors = []
 
     # calculate exact solution
-    phiExact=getExactSoln(phi_ic, c, nt)
+    phiExact = getExactSoln(phi_ic, c, nt)
 
     # now we run and plot some schemes together with the exact solution\
     # the name of the scheme is each time in the variable methodName
     
-    methodName="FTBS"
+    methodName = "FTBS"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
-    phi_ic_local=phi_ic.copy()
-    phi,_=ad.FTBS(phi_ic_local, c, nt)
+    phi_ic_local = phi_ic.copy()
+    phi,_ = ad.FTBS(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
-    norm2=dg.l2ErrorNorm(phi, phiExact)
-    errors=np.append(errors,norm2)
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
     if(display):
        print("L2 error of "+methodName+": "+str(norm2))    
     
-    methodName="CTCS"
+    methodName = "CTCS"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
-    phi_ic_local=phi_ic.copy()
-    phi,_=ad.CTCS(phi_ic_local, c, nt)
+    phi_ic_local = phi_ic.copy()
+    phi,_ = ad.CTCS(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
-    norm2=dg.l2ErrorNorm(phi, phiExact)
-    errors=np.append(errors,norm2)
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
     if(display):
        print("L2 error of "+methodName+": "+str(norm2))    
     
-    methodName="CNCS"
+    methodName = "CNCS"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
-    phi_ic_local=phi_ic.copy()
-    phi,_=ad.CNCS(phi_ic_local, c, nt)
+    phi_ic_local = phi_ic.copy()
+    phi,_ = ad.CNCS(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
-    norm2=dg.l2ErrorNorm(phi, phiExact)
-    errors=np.append(errors,norm2)
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
     if(display):
        print("L2 error of "+methodName+": "+str(norm2))    
     
-    methodName="LaxWendroff"
+    methodName = "LaxWendroff"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
-    phi_ic_local=phi_ic.copy()
-    phi,_=ad.LaxWendroff(phi_ic_local, c, nt)
+    phi_ic_local = phi_ic.copy()
+    phi,_ = ad.LaxWendroff(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
-    norm2=dg.l2ErrorNorm(phi, phiExact)
-    errors=np.append(errors,norm2)
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
     if(display):
        print("L2 error of "+methodName+": "+str(norm2)) 
     
@@ -181,15 +181,15 @@ def main(nx, nt, c):
     """
     
     # initialize the vector of space points, our domain is [0,1]
-    x=np.linspace(0,1,nx)
+    x = np.linspace(0,1,nx)
 
     #first plot for a smooth function, all schemes
-    phi_ic=ic.cosineBasedFctn(x, 0.5)    
-    _=runAllSchemes(x, phi_ic, nx, nt, c, True)
+    phi_ic = ic.cosineBasedFctn(x, 0.5)    
+    _ = runAllSchemes(x, phi_ic, nx, nt, c, True)
 
     #then plot for square wave, all schemes
-    phi_ic=ic.squareWave(x, 0, 0.5)    
-    _=runAllSchemes(x, phi_ic, nx, nt, c, True)
+    phi_ic = ic.squareWave(x, 0, 0.5)    
+    _ = runAllSchemes(x, phi_ic, nx, nt, c, True)
     
     return
 
@@ -217,34 +217,34 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     display (bool default=False): indicates wether we want to see \
            graphs/prints
     """
-    nrOfIterations=((endNx-startNx)/stepNx)+1
-    errorsArray=[]
-    dxs=np.empty(shape=[0])
-    iteration=0
+    nrOfIterations = ((endNx-startNx)/stepNx)+1
+    errorsArray = []
+    dxs = np.empty(shape=[0])
+    iteration = 0
 
     for currNx in range(startNx, endNx, stepNx):
-        nx=currNx
-        nt=nx
+        nx = currNx
+        nt = nx
         # initialize the vector of space points, our domain is [0,1]
-        x=np.linspace(0,1,nx)
-        dxs=np.append(dxs,x[1] - x[0])
+        x = np.linspace(0,1,nx)
+        dxs = np.append(dxs,x[1] - x[0])
         #to check convergence use smooth function
-        phi_ic=ic.cosineBasedFctn(x, 0.5)
-        errline=runAllSchemes(x, phi_ic, nx, nt, c)
-        errorsArray=np.append(errorsArray, errline)
-        iteration=iteration+1
+        phi_ic = ic.cosineBasedFctn(x, 0.5)
+        errline = runAllSchemes(x, phi_ic, nx, nt, c)
+        errorsArray = np.append(errorsArray, errline)
+        iteration = iteration+1
     
     # to check order of convergence we see the behaviour of log-log plots
-    dxLog=np.where(dxs>0, np.log10(dxs), 0)
-    ErrorsLog=np.where(errorsArray>0, np.log10(errorsArray), 0)
-    ErrorsLog=ErrorsLog.reshape(iteration, len(errline))    
-    ErrorsLog=np.matrix.transpose(ErrorsLog)
-    dxLogArray=np.array([dxLog,]*iteration)
-    methods=["FTBS", "CTCS", "CNCS", "LaxWendroff"]
+    dxLog = np.where(dxs>0, np.log10(dxs), 0)
+    ErrorsLog = np.where(errorsArray>0, np.log10(errorsArray), 0)
+    ErrorsLog = ErrorsLog.reshape(iteration, len(errline))    
+    ErrorsLog = np.matrix.transpose(ErrorsLog)
+    dxLogArray = np.array([dxLog,]*iteration)
+    methods = ["FTBS", "CTCS", "CNCS", "LaxWendroff"]
     if(display):
        for i in range (0, 4):
            plt.plot(dxLog, ErrorsLog[i], label=methods[i])
-           coeff=np.polyfit(dxLog,ErrorsLog[i],1)
+           coeff = np.polyfit(dxLog,ErrorsLog[i],1)
            polynomial = np.poly1d(coeff)
            print("Estimated order of convergence for "+methods[i]+\
                 ": "+str(coeff[0]))
