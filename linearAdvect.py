@@ -38,9 +38,15 @@ def plotComparison(x, nt, nx, c, phi, phiExact, methodName):
     show()
 
 def getExactSoln(phi_ic, c, nt):
+    """
     # in the linear adv eqn exact soln=initial condition shifted by \
     # c*nt*dx, therefore the shift in position in the array is c*nt \
     # the quantity is converted to int as it is a position
+    This routine returns the exact solution, given the i.c.
+    
+    
+    """"
+    
     lag=int(c*nt)
 
     # phiExact stores the exact solution phi(x-ut)
@@ -48,21 +54,31 @@ def getExactSoln(phi_ic, c, nt):
     
     return phiExact
 
-def myAppend(arrayToProcess, valueToAppend):
-    if arrayToProcess==None:
-        arrayToProcess=[valueToAppend]
-    else:
-        if arrayToProcess[0]==None:
-           arrayToProcess[0]=valueToAppend
-        else:
-           arrayToProcess=np.append(arrayToProcess, valueToAppend)
-    
-    return arrayToProcess
 
 def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     """
+    Analysis of linear advection equation using numerical schemes
+                           taken from file advectionSchemes
+    This file runs the following schemes:
+        "FTBS", "CTCS", "CNCS", "LaxWendroff", 
+    L2 norm errors of exact solution vs numerical solution
+    are returned.
+    
+    inputs are:
+    x (vector of float): vector of x-axis values
+    phi_ic (array of floats):
+        initial condition on phi
+    nx (int): nr of space points
+    nt (int): nr of time steps
+    c (float): Courant number
+    display (bool default=False): indicates wether we want to see \
+           graphs/prints
+    
+    output:
+    errors (array of float): array containing the L2norm error \
+       of the schemes
     """
-    # we initialise the errors vector to none, and then we will append data
+    # we initialise the errors vector to [], and then we will append data
     # although it is slightly inefficient not to have the exact size
     # of the error vector, it is a small inefficiency, since we will only
     # run 4-5 schemes, but it's much more flexible and less error prone
@@ -134,10 +150,14 @@ def main(nx, nt, c):
     """
     Analysis of linear advection equation using numerical schemes
                            taken from file advectionSchemes
+    This file takes 2 initial conditions and runs the routine 
+    runAllSchemes (see for reference), that will run and plot
+    the schemes: "FTBS", "CTCS", "CNCS", "LaxWendroff"
+    
     inputs are:
-    nx: nr of steps on the x-axis
-    nt: nr of time steps
-    c: Courant number
+    nx (int): nr of steps on the x-axis
+    nt (int): nr of time steps
+    c (float): Courant number
     """
     
     # initialize the vector of space points, our domain is [0,1]
@@ -155,7 +175,28 @@ def main(nx, nt, c):
 
 
 def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
+    """
+    Analysis of linear advection equation using numerical schemes
+                           taken from file advectionSchemes
+    This file uses a smooth initial condition and runs the routine 
+    runAllSchemes (see for reference) for different nx and nt.
+    The schemes are: "FTBS", "CTCS", "CNCS", "LaxWendroff", 
+    L2 norm errors of exact solution vs numerical solution
+    are checked in a log-log plot to test the order of convergence.
     
+    nx and nt are kept equal for convenience, in this way we avoid rounding
+    errors (the ratio nx/nt must remain constant to perform checks on 
+    order of convergence)
+    
+    
+    inputs are:
+    c (float): Courant number
+    startNx (int):
+    endNx (int):
+    stepNx (int):
+    display (bool default=False): indicates wether we want to see \
+           graphs/prints
+    """
     nrOfIterations=((endNx-startNx)/stepNx)+1
     errorsArray=[]
     dxs=np.empty(shape=[0])
@@ -195,4 +236,5 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
 # call main from here, main(nx, nt, c)
 #main(50, 50, 0.4)
 #main(400, 400,  0.4)
+# run order of convergence tests
 runErrorTests(0.2, 50, 500, stepNx=50, display=True)
