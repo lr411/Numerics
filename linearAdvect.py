@@ -115,7 +115,7 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
-    phi,_ = ad.FTBS(phi_ic_local, c, nt)
+    phi, _, _ = ad.FTBS(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
@@ -128,7 +128,7 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
-    phi,_ = ad.CTCS(phi_ic_local, c, nt)
+    phi, _, _ = ad.CTCS(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
@@ -141,7 +141,7 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
-    phi,_ = ad.CNCS(phi_ic_local, c, nt)
+    phi, _, _ = ad.CNCS(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
@@ -154,7 +154,7 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
-    phi,_ = ad.LaxWendroff(phi_ic_local, c, nt)
+    phi, _, _ = ad.LaxWendroff(phi_ic_local, c, nt)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact

@@ -57,7 +57,7 @@ def CNCS(phiIC, c, nt, calculateConservation=False):
     Mold[0,nx-1]=0.25*c
     Mold[nx-1,0]=-0.25*c
     
-    # Create and initialize the vector of means
+    # Create and initialize the vector of means and variances
     phiMeans=zeros(nt)
     phiVariances=zeros(nt)
     
@@ -67,11 +67,11 @@ def CNCS(phiIC, c, nt, calculateConservation=False):
         phi=spsolve(M, Mold*phi)                
         
         if(calculateConservation):
-           # calculate mass (means)
+           # calculate mass and variance
            phiMeans[it]=mean(phi)
            phiVariances[it]=var(phi)
 
-    return phi,phiMeans
+    return phi, phiMeans, phiVariances
 
 
 def LaxWendroff(phiOld, c, nt, calculateConservation=False):   
@@ -104,7 +104,7 @@ def LaxWendroff(phiOld, c, nt, calculateConservation=False):
     # Crerate and init the output array of required size
     phi=zeros(nx)
     
-    # Create and initialize the vector of means
+    # Create and initialize the vector of means and variances
     phiMeans=zeros(nt)
     phiVariances=zeros(nt)
     
@@ -124,11 +124,12 @@ def LaxWendroff(phiOld, c, nt, calculateConservation=False):
         phiOld=phi.copy()
                 
         if(calculateConservation):
-           # calculate mass (means)
+           # calculate mass and variance
            phiMeans[it]=mean(phi)
+           phiVariances[it]=var(phi)
 
 
-    return phi,phiMeans
+    return phi, phiMeans, phiVariances
 
 
 def FTBS(phiOld, c, nt, calculateConservation=False):     
@@ -161,7 +162,7 @@ def FTBS(phiOld, c, nt, calculateConservation=False):
     # Crerate and init array of required size
     phi=zeros(nx)
     
-    # Create and initialize the vector of means
+    # Create and initialize the vector of means and variances
     phiMeans=zeros(nt)
     phiVariances=zeros(nt)
 
@@ -179,11 +180,12 @@ def FTBS(phiOld, c, nt, calculateConservation=False):
         phiOld=phi.copy()
                 
         if(calculateConservation):
-           # calculate mass (means)
+           # calculate mass and variance
            phiMeans[it]=mean(phi)
+           phiVariances[it]=var(phi)
 
 
-    return phi,phiMeans
+    return phi, phiMeans, phiVariances
 
 
 def FTCS(phiOld, c, nt, calculateConservation=False):    
@@ -221,7 +223,7 @@ def FTCS(phiOld, c, nt, calculateConservation=False):
     # Crerate and init array of required size
     phi=zeros(nx)
     
-    # Create and initialize the vector of means
+    # Create and initialize the vector of means and variances
     phiMeans=zeros(nt)
     phiVariances=zeros(nt)
 
@@ -239,10 +241,11 @@ def FTCS(phiOld, c, nt, calculateConservation=False):
         phiOld=phi.copy()
         
         if(calculateConservation):
-           # calculate mass (means)
+           # calculate mass and variance
            phiMeans[it]=mean(phi)
+           phiVariances[it]=var(phi)
 
-    return phi,phiMeans
+    return phi, phiMeans, phiVariances
 
 
 def CTCS(phi_ic, c, nt, calculateConservation=False):    
@@ -278,16 +281,17 @@ def CTCS(phi_ic, c, nt, calculateConservation=False):
     # copy the initial condition into the n-1 array
     phi_nm1=phi_ic.copy()
 
-    # Create and initialize the vector of means
+    # Create and initialize the vector of means and variances
     phiMeans=zeros(nt)
     phiVariances=zeros(nt)
 
     # Calculate array of previous time step doing 1 FTCS step from i.c.
-    phi_n,phiMean1stStep=FTCS(phi_ic, c, 1, calculateConservation)
+    phi_n, phiMean1stStep, phiVar1stStep=FTCS(phi_ic, c, 1, calculateConservation)
     
     if(calculateConservation):
-        # store mass from first step
+        # store values from first step
         phiMeans[0] = phiMean1stStep[0]
+        phiVariances[0] = phiVar1stStep[0]
     
     # Now we have all the quantities we need to start
     
@@ -306,8 +310,9 @@ def CTCS(phi_ic, c, nt, calculateConservation=False):
         phi_n=phi_np1.copy()
 
         if(calculateConservation):
-           # calculate mass (means)
+           # calculate mass and variance
            phiMeans[it]=mean(phi)
+           phiVariances[it]=var(phi)
 
-    return phi_np1,phiMeans
+    return phi_np1, phiMeans, phiVariances
 
