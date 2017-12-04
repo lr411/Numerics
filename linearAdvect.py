@@ -20,7 +20,7 @@
 import numpy as np
 # the following is included because otherwise the first time I run\
 # the code gives an error
-import pylab as py
+import pylab as plt
 
 
 import initialConditions as ic
@@ -51,7 +51,7 @@ def plotComparison(x, nt, nx, c, phi, phiExact, methodName):
     plt.title(str(methodName)+" scheme\nExact vs Numerical solution "\
               "nt="+str(nt)+", nx="+str(nx)+"\n"
               "Courant number: "+str(c))
-    show()
+    plt.show()
 
 def getExactSoln(phi_ic, c, nt):
     """
@@ -235,6 +235,7 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
         iteration = iteration+1
     
     # to check order of convergence we see the behaviour of log-log plots
+    # just for extra safety we check >0 for log
     dxLog = np.where(dxs>0, np.log10(dxs), 0)
     ErrorsLog = np.where(errorsArray>0, np.log10(errorsArray), 0)
     ErrorsLog = ErrorsLog.reshape(iteration, len(errline))    
@@ -250,7 +251,7 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
                 ": "+str(coeff[0]))
        plt.title("Log-log plot of L2 errors vs dx")
        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-       show()
+       plt.show()
     
 
 # call main from here, main(nx, nt, c)
