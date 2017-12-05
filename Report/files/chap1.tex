@@ -1,11 +1,29 @@
 %Chapter  Numerical methods
 
 \section{Numerical Methods}
-All the equations for the numerical methods presented in this chapter have been taken from \cite{mpebook} and \cite{nmnotes}. Additional sources will be acknowledged when used throughout the chapter.
+All the equations of the numerical methods presented in this chapter have been taken from \cite{mpebook} and \cite{nmnotes}. Meaning of symbols, when not explicitly explained, are assumed also as in \cite{mpebook} and \cite{nmnotes}. Additional sources will be acknowledged when used throughout the chapter.
 
 \subsection{FTBS}
 
 \begin{equation}
-\frac{\delta \phi(x,t)}{\delta t}+u\frac{\delta \phi(x,t)}{\delta x}=0
-\label{eq:linadvec}
+\phi_j^{n+1}=\phi_j^{n}-c(\phi_j^{n}-\phi_{j-1}^{n})
+\label{eq:ftbs}
 \end{equation}
+Equation (\ref{eq:ftbs}) describes the time evolution of FTBS. As described in \cite{mpebook}, the scheme is first order accurate in time and space, and stable for $c\in[0,1]$. It conserves mass but not variance. it has been included in this report for it's "naivety", to be used as term of comparison with other, better performing schemes.
+
+
+\subsection{CTCS}
+\begin{equation}
+\phi_j^{n+1}=\phi_j^{n}-c(\phi_{j+1}^{n}-\phi_{j-1}^{n})
+\label{eq:ctcs}
+\end{equation}
+Equation (\ref{eq:ftbs}) describes the time evolution of CTCS. As described in \cite{mpebook}, the scheme is second order accurate in time and space, and stable for $c\in[-1,1]$. The method introduces some computational modes, and conserves mass and variance.
+
+
+\subsection{CNCS}
+\begin{equation}
+\phi_j^{n+1}=\phi_j^{n}-\frac{c}{4}(\phi_{j+1}^{n+1}-\phi_{j-1}^{n+1}+\phi_{j+1}^{n}-\phi_{j-1}^{n})
+\label{eq:ctcs}
+\end{equation}
+Equation (\ref{eq:ftbs}) describes the time evolution of CTCS. As described in \cite{mpebook}, the scheme is second order accurate in time and space, and stable for $c\in[-1,1]$. The method introduces some computational modes, and conserves mass and variance.
+
