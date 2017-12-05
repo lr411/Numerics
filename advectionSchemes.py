@@ -311,8 +311,8 @@ def CTCS(phi_ic, c, nt, calculateConservation=False):
 
         if(calculateConservation):
            # calculate mass and variance
-           phiMeans[it]=mean(phi)
-           phiVariances[it]=var(phi)
+           phiMeans[it]=mean(phi_np1)
+           phiVariances[it]=var(phi_np1)
 
     return phi_np1, phiMeans, phiVariances
 

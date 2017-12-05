@@ -198,7 +198,7 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     """
     Analysis of linear advection equation using numerical schemes
                            taken from file advectionSchemes
-    This file uses a smooth initial condition and runs the routine 
+    This function uses a smooth initial condition and runs the routine 
     runAllSchemes (see for reference) for different nx and nt.
     The schemes are: "FTBS", "CTCS", "CNCS", "LaxWendroff", 
     L2 norm errors of exact solution vs numerical solution
@@ -226,8 +226,8 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
         nx = currNx
         nt = nx
         # initialize the vector of space points, our domain is [0,1]
-        x = np.linspace(0,1,nx)
-        dxs = np.append(dxs,x[1] - x[0])
+        x = np.linspace(0, 1, nx)
+        dxs = np.append(dxs, x[1] - x[0])
         #to check convergence use smooth function
         phi_ic = ic.cosineBasedFctn(x, 0.5)
         errline = runAllSchemes(x, phi_ic, nx, nt, c)
@@ -240,23 +240,134 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     ErrorsLog = np.where(errorsArray>0, np.log10(errorsArray), 0)
     ErrorsLog = ErrorsLog.reshape(iteration, len(errline))    
     ErrorsLog = np.matrix.transpose(ErrorsLog)
-    dxLogArray = np.array([dxLog,]*iteration)
     methods = ["FTBS", "CTCS", "CNCS", "LaxWendroff"]
     if(display):
        for i in range (0, 4):
            plt.plot(dxLog, ErrorsLog[i], label=methods[i])
            coeff = np.polyfit(dxLog,ErrorsLog[i],1)
-           polynomial = np.poly1d(coeff)
            print("Estimated order of convergence for "+methods[i]+\
                 ": "+str(coeff[0]))
        plt.title("Log-log plot of L2 errors vs dx")
        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
        plt.show()
+
+
+def plotConservation(nt, massesVector, varianceVector, methodName):
+    """
+    plot of mass and variance conservation for the numerical scheme \
+    described by methodName
+    inputs are:
+    nt (int): nr of time steps
+    massesVector (array of floats): array containing the measured mean \
+          at each time step
+    varianceVector (array of floats): array containing the measured var \
+          at each time step
+    methodName: string containing the name of the numerical method
+    """
+    # generate vector of time for plots
+    timeVector = range(0, nt)
+    
+    plt.plot(timeVector, massesVector, label="mass")
+    plt.plot(timeVector, varianceVector, label="variance")
+    plt.title("Mass and variance for " + methodName + \
+              "\nVs " + str(nt) + " time steps")
+    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    plt.show()
+    
+    # calculate mean and variance around mean of the means
+    meanOfMeans = np.mean(massesVector)
+    varOfMeans = np.var(massesVector)
+    
+    # print results
+    print("Average of mean: "+str(meanOfMeans))
+    print("Variance of mean: "+str(varOfMeans))
+
+    # calculate mean and variance around mean of the variances
+    meanOfVars = np.mean(varianceVector)
+    varOfVars = np.var(varianceVector)
+        
+    # print results
+    print("Average of variances: "+str(meanOfVars))
+    print("Variance of variances: "+str(varOfVars))
+    
     
 
+def checkConservation(nx, nt, c, display=False):
+    """
+    Analysis of mass and variance conservation
+    for schemes: "FTBS", "CTCS", "CNCS", "LaxWendroff"
+    
+    inputs are:
+    nx (int): nr of steps on the x-axis
+    nt (int): nr of time steps
+    c (float): Courant number
+    display (boolean, default=False): indicates wether to print results or not
+    """
+    
+    # create array of space points
+    x = np.linspace(0, 1, nx)
+    
+    # we use a smooth function
+    phi_ic = ic.cosineBasedFctn(x, 0.5)
+
+    # now we run and plot mass and variance conservation
+    # the name of the scheme is each time in the variable methodName
+    
+    methodName = "FTBS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, phiVar = ad.FTBS(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation(nt, phiMean, phiVar, methodName)
+
+    
+    methodName = "CTCS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, phiVar = ad.CTCS(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation(nt, phiMean, phiVar, methodName)
+
+    
+    methodName = "CNCS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, phiVar = ad.CNCS(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation(nt, phiMean, phiVar, methodName)
+
+    
+    methodName = "LaxWendroff"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, phiVar = ad.LaxWendroff(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation(nt, phiMean, phiVar, methodName)
+
+
+"""
 # call main from here, main(nx, nt, c)
 main(50, 50, 0.4)
 main(400, 400,  0.4)
 print("\n")
 # run order of convergence tests
 runErrorTests(0.2, 50, 500, stepNx=50, display=True)
+"""
+# check mass conservation
+checkConservation(50, 50, 0.4, display=True)
