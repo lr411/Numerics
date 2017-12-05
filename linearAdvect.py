@@ -370,4 +370,4 @@ print("\n")
 runErrorTests(0.2, 50, 500, stepNx=50, display=True)
 """
 # check mass conservation
-checkConservation(50, 50, 0.4, display=True)
+checkConservation(400, 400, 0.4, display=True)

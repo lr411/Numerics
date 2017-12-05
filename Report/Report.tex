@@ -1,6 +1,6 @@
 %:
 %\documentclass[12pt,mythesisstyle,twoside]{report}%% for two-sided printing
-\documentclass[12pt,mythesisstyle]{report}
+\documentclass[12pt,mythesisstyle]{article}
 \usepackage{files/mythesisstyle}
 %\usepackage{bbm}
 
@@ -30,6 +30,8 @@
 \setcounter{tocdepth}{2}
 %\setcounter{secnumdepth}{3}
 
+% set this to remove page number
+\pagestyle{empty}
 
 %% sets things up for running PDFLaTeX / LaTeX
 %%\newif\ifpdf
@@ -77,7 +79,7 @@
 %%% set switches
 %\contentspagefalse
 %\figurespagetrue
-\tablespagetrue
+%\tablespagetrue
 %\dedicationpagetrue
 %\quotationpagetrue
 %\otherlistpagetrue
@@ -88,32 +90,32 @@
 % *********************************************************************
             % TITLE
 % *********************************************************************
-\title{Numerical Methods \\
-        Course Assignment Report \\  % or change to something similar
-        }
+%\title{Numerical Methods \\
+%        Course Assignment Report \\  % or change to something similar
+%        }
 
-\author{Leonardo Ripoli}
+%\author{Leonardo Ripoli}
 
 %\docrevision{1 0}
 
-\qualification{}
+%\qualification{}
 
 %\degree{Master of Science}
 %\dept{Mathematics}
     % Semester & year you submit dissertation to the GSAS.
-\submitdate{15 November 2017}
+%\submitdate{15 November 2017}
 
-\advisor{Hilary Weller}
+%\advisor{Hilary Weller}
 
     %Optional title page items: remove percent if you need them.
 %\entity{School}    % Department (default), School, etc.
 %\endeavour{thesis}  % thesis (default),extended essay, etc.
-\copyrightyear{2017}   % year LaTeX'ed (default).
+%\copyrightyear{2017}   % year LaTeX'ed (default).
 
 
 
 
-\beforepreface
+%\beforepreface
 
 
 
@@ -139,10 +141,10 @@
 %\prefacesection{Acknowledgments}
 %\input{files/ackno}
 
-\prefacesection{Abstract}
-\input{files/abstract}
+%\prefacesection{Abstract}
+%\input{files/abstract}
 
-\afterpreface
+%\afterpreface
 
 \onehalfspacing
 
@@ -150,14 +152,21 @@
 % *********************************************************************
 % THE CHAPTERS
 % *********************************************************************
+\title{Numerical Methods}
+\author{Leonardo Ripoli \thanks{funded by the ShareLaTeX team}}
+\date{February 2014}
 
-\chapter{FTBS}\label{chap:ftbs}
+
+%\chapter{Introduction}\label{chap:intro}
+\input{files/intro}
+
+%\chapter{FTBS}\label{chap:ftbs}
 \input{files/chap1}
 
-\chapter{CTCS}\label{chap:ctcs}
+%\chapter{CTCS}\label{chap:ctcs}
 \input{files/chap2}
 
-\chapter{Python Implementation}\label{chap:pythonimplementation}
+%\chapter{Python Implementation}\label{chap:pythonimplementation}
 \input{files/chap3}
 
 \input{files/biblio}
