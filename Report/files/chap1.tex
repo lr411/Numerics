@@ -9,7 +9,7 @@ All the equations of the numerical methods presented in this chapter have been t
 \phi_j^{n+1}=\phi_j^{n}-c(\phi_j^{n}-\phi_{j-1}^{n})
 \label{eq:ftbs}
 \end{equation}
-Equation (\ref{eq:ftbs}) describes the time evolution of FTBS. The scheme is first order accurate in time and space, and stable for $c\in[0,1]$. It conserves mass, is damping and diffusive and therefore monotonic. It has been included in this report for it's "naivety", to be used as term of comparison with other, better performing schemes.
+Equation (\ref{eq:ftbs}) describes the time evolution of FTBS. The scheme is first order accurate in time and space, and stable for $c\in[0,1]$. It conserves mass, is damping, diffusive and monotonic. It has been included in this report for it's "naivety", to be used as term of comparison with other, better performing schemes.
 
 
 \subsection{CTCS}
@@ -17,15 +17,14 @@ Equation (\ref{eq:ftbs}) describes the time evolution of FTBS. The scheme is fir
 \phi_j^{n+1}=\phi_j^{n}-c(\phi_{j+1}^{n}-\phi_{j-1}^{n})
 \label{eq:ctcs}
 \end{equation}
-Equation (\ref{eq:ctcs}) describes the time evolution of CTCS. The scheme is second order accurate in time and space, and stable for $c\in[-1,1]$. The method introduces some computational modes, and conserves mass and variance.
-
+Equation (\ref{eq:ctcs}) describes the time evolution of CTCS. The scheme is second order accurate in time and space, and stable for $c\in[-1,1]$. The method introduces some computational modes.
 
 \subsection{LaxWendroff}
 \begin{equation}
 \phi_j^{n+1}=\frac{c}{2}(c+1)\phi_{j-1}^{n}+(1-c^2)\phi_{j}^{n}+\frac{c}{2}(c+1)\phi_{j+1}^{n}
 \label{eq:laxwendroff}
 \end{equation}
-Equation (\ref{eq:laxwendroff}) describes the time evolution of LaxWendroff method. The method is second order accurate in space and time and, does not add spurious computational modes: in the LaxWendroff case (unline CTCS), in the CFL criterion analysis, the domain of convergence study of the numerical scheme leaves no "open" points, there is only one physical solution. It can be shown, that the method is stable for $c\in[-1,1]$, in fact it can be shown, with some calculations, that the amplification factor in the Von Neumann analysis is:
+Equation (\ref{eq:laxwendroff}) describes the time evolution of LaxWendroff method. The method is second order accurate in space and time and, does not add spurious computational modes: in the LaxWendroff case (unlike CTCS), in the CFL criterion analysis, the domain of convergence study of the numerical scheme leaves no "open" points, there is only one physical solution. It can be shown, that the method is stable for $c\in[-1,1]$, in fact it can be shown, that the amplification factor in the Von Neumann analysis is:
 \begin{equation}
 \label{eq:laxwen_vonneumann}
 A=(1+c^2(cos(k\Delta x)-1))-icsin(k\Delta x)
@@ -37,5 +36,10 @@ and the condition on $|A|\leq1$ brings the constraint $c\in[-1,1]$.
 \phi_j^{n+1}=\phi_j^{n}-\frac{c}{4}(\phi_{j+1}^{n+1}-\phi_{j-1}^{n+1}+\phi_{j+1}^{n}-\phi_{j-1}^{n})
 \label{eq:cncs}
 \end{equation}
-Equation (\ref{eq:cncs}) describes the time evolution of CTCS. The scheme is second order accurate in time and space, and stable for $c\in\mathbb{R}$.
+Equation (\ref{eq:cncs}) describes the time evolution of CNCS. The scheme is implicit and second order accurate in time and space, and stable for $c\in\mathbb{R}$. It has been added for its unconditional stability. In fact the amplification factor, in the Von Neumann analysis is the following:
+\begin{equation}
+\label{eq:cncs_vonneumann}
+A=\frac{2-icsin(k\Delta x)}{2+icsin(k\Delta x)}
+\end{equation}
+and $|A|=1$ unconditionally.
 

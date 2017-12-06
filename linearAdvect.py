@@ -10,11 +10,7 @@
 # # linearAdvect.py : this file
 #         
 # We assume that time t varies in [0,1] and x varies in [0,1]        
-# This file, when launched, calls the routine main twice,
-# running the numerical schemes and plotting the results vs the exact
-# solution, for two different time steps.
-# Then the order of convergence is checked calling the routine runErrorTests        
-# =============================================================================
+# This file, when launched, calls the routine runLinAdvec that performs tests
 """
 
 import numpy as np
@@ -499,10 +495,11 @@ def plotConservation(nt, massesVector, varianceVector, methodName):
     # print results
     print("Average of variances: "+str(meanOfVars))
     print("Variance of variances: "+str(varOfVars))
+
     
 def plotConservation2(c, nt, massesVector, methodName):
     """
-    plot of mass and variance conservation for the numerical scheme \
+    plot of mass conservation for the numerical scheme \
     described by methodName
     inputs are:
     c (float): Courant number
@@ -522,13 +519,13 @@ def plotConservation2(c, nt, massesVector, methodName):
     varOfMeans = np.var(massesVector)
     
     # print results
-    print("Average of mean: "+str(meanOfMeans))
-    print("Variance of mean: "+str(varOfMeans))    
+    print("Average of mean " + methodName + ": " + str(meanOfMeans))
+    print("Variance of mean " + methodName + ": " + str(varOfMeans))    
 
 
-def checkConservation(nx, nt, c, display=False):
+def checkConservation2(nx, nt, c, display=False):
     """
-    Analysis of mass and variance conservation
+    Analysis of mass conservation
     for schemes: "FTBS", "CTCS", "CNCS", "LaxWendroff"
     
     inputs are:
@@ -542,7 +539,7 @@ def checkConservation(nx, nt, c, display=False):
     x = np.linspace(0, 1, nx)
     
     # we use a smooth function
-    phi_ic = ic.mySineFctn(x)  
+    phi_ic = ic.squareWave(x, 0, 0.5)  
 
 
     if(display):
@@ -560,7 +557,7 @@ def checkConservation(nx, nt, c, display=False):
                                    calculateConservation=True)
     
     if(display):
-       plotConservation2(nt, phiMean, methodName)
+       plotConservation2(c, nt, phiMean, methodName)
 
     
     methodName = "CTCS"
@@ -572,7 +569,81 @@ def checkConservation(nx, nt, c, display=False):
                                    calculateConservation=True)
     
     if(display):
-       plotConservation2(nt, phiMean, methodName)
+       plotConservation2(c, nt, phiMean, methodName)
+
+    
+    methodName = "CNCS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, _ = ad.CNCS(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation2(c, nt, phiMean, methodName)
+
+    
+    methodName = "LaxWendroff"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, _ = ad.LaxWendroff(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation2(c, nt, phiMean, methodName)
+
+
+    if(display):
+       plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+       #plt.ylim([0.2, 0.3])
+       plt.show()
+
+def checkConservation(nx, nt, c, display=False):
+    """
+    Analysis of mass and variance conservation
+    for schemes: "FTBS", "CTCS", "CNCS", "LaxWendroff"
+    
+    inputs are:
+    nx (int): nr of steps on the x-axis
+    nt (int): nr of time steps
+    c (float): Courant number
+    display (boolean, default=False): indicates wether to print results or not
+    """
+    
+    # create array of space points
+    x = np.linspace(0, 1, nx)
+    
+    # we use a smooth function
+    phi_ic = ic.cosineBasedFctn(x, 0.5)
+
+    # now we run and plot mass and variance conservation
+    # the name of the scheme is each time in the variable methodName
+    
+    methodName = "FTBS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, phiVar = ad.FTBS(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation(nt, phiMean, phiVar, methodName)
+
+    
+    methodName = "CTCS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    
+    _, phiMean, phiVar = ad.CTCS(phi_ic_local, c, nt, \
+                                   calculateConservation=True)
+    
+    if(display):
+       plotConservation(nt, phiMean, phiVar, methodName)
 
     
     methodName = "CNCS"
@@ -597,12 +668,6 @@ def checkConservation(nx, nt, c, display=False):
     
     if(display):
        plotConservation(nt, phiMean, phiVar, methodName)
-
-    if(display):
-       plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-       plt.show()
-
-
 
 
 def runTimingTests(c, startNx, endNx, stepNx, displayResults = False):
@@ -643,29 +708,25 @@ def runTimingTests(c, startNx, endNx, stepNx, displayResults = False):
        plt.title("Log-log plot time of execution in s vs nx\nc="+str(c))
        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
        plt.show()    
-    
+        
 
 def runLinAdvec():
-    # call main from here, main(nx, nt, c)
     """
     main function to run the linear advection project
     """
     # Courant number    
     c = 0.4
-    """
     #just run and print, for two different Courant numbers
     main(50, 50, c, displayResults = True)
     main(400, 400, c, displayResults = True)
     print("\n")
-
     # run order of convergence tests
-    runErrorTests(c, 300, 1000, stepNx=50, display=True)
+    runErrorTests(c, 50, 300, stepNx=50, display=True)
     # run timing tests
     runTimingTests(c, 50, 600, stepNx=50, displayResults=True)
     # check monotonicity
     checkMonotonicity(50, 50, c, displayResults = True)
-    """
-    # check mass conservation
-    checkConservation(400, 400, c, display=True)
-    
+    # check mass/variance conservation
+    checkConservation(200, 200, c, display=True)
+
 runLinAdvec()

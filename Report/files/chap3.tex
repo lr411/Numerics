@@ -2,4 +2,30 @@
 
 
 \section{Conclusions}
+The numerical schemes FTBS, CTCS, Lax Wendroff and CNCS have been presented in this work. The Lax Wendroff scheme among the explicit methods guarantees higher order of accuracy and absence of computational modes, but has proven computationally expensive as seen in section \ref{sec:compcost}, the CNCS is the implicit method, among those tested, that guarantees unconditional stability and second order accuracy in time and space. The CNCS has also shown significant advantages for the speed of execution, as seen in section \ref{sec:compcost}, most probably thanks to the fast sparse matrices algorithms used by python.
+As shown in figure \ref{fig:laxFinal} and \ref{fig:cncsFinal}, both methods approximate well the original solution, in the case of a smooth i.c.
+\begin{equation}
+\phi_0(t)=\left\{
+\begin{array}{lr}
+\frac{1}{2}(1-cos(4\pi x)) & 0\leq x<\frac{1}{2} \\
+0 &  \frac{1}{2}\leq x\leq 1 \\
+\end{array}
+\right.
+\label{eq:initcondcos}
+\end{equation}
+ 
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/LaxWenFinal.png}
+	\end{center}%
+	\caption[LaxWenFinal]{ \em i.c. used is eq (\ref{eq:initcondcos}). L2 norm of error = 0.0008}
+	\label{fig:laxFinal}
+\end{figure}
 
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/CNCSfinal.png}
+	\end{center}%
+	\caption[CNCS final]{ \em i.c. used is eq (\ref{eq:initcondcos}). L2 norm of error = 0.001}
+	\label{fig:cncsFinal}
+\end{figure}
