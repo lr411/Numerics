@@ -3,7 +3,9 @@
 
 \section{Results}
 
-\subsection{Order of accuracy}
+\subsection{General results}
+
+\subsubsection{Order of accuracy}
 As described in the previous parts of this document, the theoretical order of accuracy of the numerical schemes used is:
 \begin{itemize}
 	\item FTBS: 1
@@ -11,4 +13,23 @@ As described in the previous parts of this document, the theoretical order of ac
 	\item Lax Wendroff: 2
 	\item CNCS: 2
 \end{itemize}
+The following figure \ref{fig:orderofacc} shows the results of the experiment of 10 runs of the 4 schemes, with nt and nx varying between 50 and 500, with a step of 50.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Accuracy.png}
+	\end{center}%
+	\caption[Order of accuracy of numerical methods]{ \em Estimated order of accuracy of numerical methods versus the size of $\Delta x$, with nt and nx varying between 50 and 500, with a step of 50}
+	\label{fig:orderofacc}
+\end{figure}
+
+\subsection{Order of accuracy}
+To test the order of accuracy, 10 runs have been made of the 4 schemes, keeping the Courant number constant throughout, and varying nx, keeping nt=nx to avoid rounding errors. The function $sin(4\pi x)$ has been used as initial condition, it's smooth and with a single frequency and therefore does not suffer from dispersion errors that could affect the error.
+The results of the runs are shown in figure \ref{fig:orderofacc} , and the estimated order of accuracy for the methods is as follows:
+\begin{itemize}
+\item FTBS: 0.91
+\item CTCS: 1.80
+\item CNCS: 1.79
+\item LaxWendroff: 1.79
+\end{itemize}
+The results are close to the theoretical ones.
 

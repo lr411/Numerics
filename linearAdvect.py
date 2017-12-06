@@ -21,6 +21,7 @@ import numpy as np
 # the following is included because otherwise the first time I run\
 # the code gives an error
 import pylab as plt
+import timeit
 
 
 import initialConditions as ic
@@ -68,10 +69,15 @@ def getExactSoln(phi_ic, c, nt):
     phiExact (array of floats): exact solution after nt time steps 
     """
     
+    dimx = len(phi_ic)    
+
     lag = int(c*nt)
 
     # phiExact stores the exact solution phi(x-ut)
     phiExact = np.roll(phi_ic, lag)
+    
+    #impose periodic boundary condn
+    phiExact[dimx-1] = phiExact[0]
     
     return phiExact
 
@@ -97,6 +103,8 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     output:
     errors (array of float): array containing the L2norm error \
        of the schemes
+    times (array of floats): array containing estimated time of execution
+       of function calls to each numerical method
     """
     # we initialise the errors vector to [], and then we will append data
     # although it is slightly inefficient not to have the exact size
@@ -104,6 +112,9 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # run 4-5 schemes, but it's much more flexible and less error prone
     # if we add more schemes
     errors = []
+    
+    # vector containing execution times of all schemes
+    executionTimes = []
 
     # calculate exact solution
     phiExact = getExactSoln(phi_ic, c, nt)
@@ -115,20 +126,30 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
     phi, _, _ = ad.FTBS(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
     norm2 = dg.l2ErrorNorm(phi, phiExact)
     errors = np.append(errors,norm2)
     if(display):
-       print("L2 error of "+methodName+": "+str(norm2))    
+       print("L2 error of "+methodName+": "+str(norm2))
     
     methodName = "CTCS"
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
     phi, _, _ = ad.CTCS(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
@@ -141,7 +162,12 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
     phi, _, _ = ad.CNCS(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
@@ -154,7 +180,12 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     # make a local copy every time because things get dirty after use
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
     phi, _, _ = ad.LaxWendroff(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
     if(display):
        plotComparison(x, nt, nx, c, phi, phiExact, methodName)
     # Calculate norm of error phi phiExact
@@ -163,10 +194,10 @@ def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
     if(display):
        print("L2 error of "+methodName+": "+str(norm2)) 
     
-    return errors
+    return errors, executionTimes 
 
 
-def main(nx, nt, c):
+def main(nx, nt, c, displayResults = False):
     """
     Analysis of linear advection equation using numerical schemes
                            taken from file advectionSchemes
@@ -178,6 +209,14 @@ def main(nx, nt, c):
     nx (int): nr of steps on the x-axis
     nt (int): nr of time steps
     c (float): Courant number
+    displayResults (bool, default=False): indicates wether to display results
+    
+    outputs:
+    errorsSmooth (array of floats): errors for smooth ic
+    timesSmooth (array of floats): estimated times of exec for smooth ic
+    errorsSq (array of floats): errors for discontinuous ic
+    timesSq (array of floats): estimated times of exec for\
+            discontinuous ic
     """
     
     # initialize the vector of space points, our domain is [0,1]
@@ -185,13 +224,15 @@ def main(nx, nt, c):
 
     #first plot for a smooth function, all schemes
     phi_ic = ic.cosineBasedFctn(x, 0.5)    
-    _ = runAllSchemes(x, phi_ic, nx, nt, c, True)
+    errorsSmooth, timesSmooth = \
+          runAllSchemes(x, phi_ic, nx, nt, c, displayResults)
 
     #then plot for square wave, all schemes
     phi_ic = ic.squareWave(x, 0, 0.5)    
-    _ = runAllSchemes(x, phi_ic, nx, nt, c, True)
+    errorsSq, timesSq = \
+          runAllSchemes(x, phi_ic, nx, nt, c, displayResults)
     
-    return
+    return errorsSmooth, timesSmooth, errorsSq, timesSq
 
 
 def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
@@ -211,13 +252,12 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
     
     inputs are:
     c (float): Courant number
-    startNx (int):
-    endNx (int):
-    stepNx (int):
+    startNx (int): initial value of nx
+    endNx (int): final value of nx
+    stepNx (int): steps in nx value increments
     display (bool default=False): indicates wether we want to see \
            graphs/prints
     """
-    nrOfIterations = ((endNx-startNx)/stepNx)+1
     errorsArray = []
     dxs = np.empty(shape=[0])
     iteration = 0
@@ -230,7 +270,7 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
         dxs = np.append(dxs, x[1] - x[0])
         #to check convergence use smooth function
         phi_ic = ic.cosineBasedFctn(x, 0.5)
-        errline = runAllSchemes(x, phi_ic, nx, nt, c)
+        errline, _ = runAllSchemes(x, phi_ic, nx, nt, c)
         errorsArray = np.append(errorsArray, errline)
         iteration = iteration+1
     
@@ -247,7 +287,7 @@ def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
            coeff = np.polyfit(dxLog,ErrorsLog[i],1)
            print("Estimated order of convergence for "+methods[i]+\
                 ": "+str(coeff[0]))
-       plt.title("Log-log plot of L2 errors vs dx")
+       plt.title("Log-log plot of L2 errors vs dx\nc="+str(c))
        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
        plt.show()
 
@@ -290,7 +330,6 @@ def plotConservation(nt, massesVector, varianceVector, methodName):
     print("Average of variances: "+str(meanOfVars))
     print("Variance of variances: "+str(varOfVars))
     
-    
 
 def checkConservation(nx, nt, c, display=False):
     """
@@ -308,7 +347,7 @@ def checkConservation(nx, nt, c, display=False):
     x = np.linspace(0, 1, nx)
     
     # we use a smooth function
-    phi_ic = ic.cosineBasedFctn(x, 0.5)
+    phi_ic = ic.mySineFctn(x)
 
     # now we run and plot mass and variance conservation
     # the name of the scheme is each time in the variable methodName
@@ -361,13 +400,65 @@ def checkConservation(nx, nt, c, display=False):
        plotConservation(nt, phiMean, phiVar, methodName)
 
 
-"""
-# call main from here, main(nx, nt, c)
-main(50, 50, 0.4)
-main(400, 400,  0.4)
-print("\n")
-# run order of convergence tests
-runErrorTests(0.2, 50, 500, stepNx=50, display=True)
-"""
-# check mass conservation
-checkConservation(400, 400, 0.4, display=True)
+def runTimingTests(c, startNx, endNx, stepNx, displayResults = False):
+    """
+    routine to run and in case plot timing tests
+
+    inputs are:
+    c (float): Courant number
+    startNx (int): initial value of nx
+    endNx (int): final value of nx
+    stepNx (int): steps in nx value increments
+    displayResults (bool default=False): indicates wether we want to\
+    see graphs/prints
+    """
+    timesArray = []
+    nxs = np.empty(shape=[0])
+    iteration = 0
+
+    for currNx in range(startNx, endNx, stepNx):
+        nx = currNx
+        nt = nx
+        nxs = np.append(nxs, nx)
+        _, timesSmooth, _, _ = main(nx, nt, c, displayResults = False)
+        timesArray = np.append(timesArray, timesSmooth)
+        iteration = iteration+1
+    
+    timesArray = timesArray.reshape(iteration, len(timesSmooth))    
+    timesArray = np.matrix.transpose(timesArray)
+    logNxs = np.log10(nxs)
+    logTimes = np.log10(timesArray)
+    methods = ["FTBS", "CTCS", "CNCS", "LaxWendroff"]
+    if(display):
+       for i in range (0, 4):
+           plt.plot(logNxs, logTimes[i], label=methods[i])
+           coeff = np.polyfit(logNxs,logTimes[i],1)
+           print("Estimated order of magnitude time vs nx "\
+                 +methods[i]+": "+str(coeff[0]))
+       plt.title("Log-log plot time of execution in ms vs nx\nc="+str(c))
+       plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+       plt.show()    
+    
+
+def runLinAdvec():
+    # call main from here, main(nx, nt, c)
+    """
+    main function to run the linear advection project
+    """
+    # Courant number    
+    c = 0.4
+
+    """
+    #just run and print, for two different Courant numbers
+    main(50, 50, c, displayResults = True)
+    main(400, 400, c, displayResults = True)
+    print("\n")
+    # check mass conservation
+    checkConservation(400, 400, c, display=True)
+    # run order of convergence tests
+    runErrorTests(c, 50, 500, stepNx=50, display=True)
+    """
+    # run timing tests
+    runTimingTests(c, 200, 600, stepNx=50, displayResults=True)
+
+runLinAdvec()

@@ -108,16 +108,19 @@ def LaxWendroff(phiOld, c, nt, calculateConservation=False):
     phiMeans=zeros(nt)
     phiVariances=zeros(nt)
     
+    b1=0.5*c*(c-1)
+    b0=(1-(c**2))
+    b_1=0.5*c*(1+c)
     # Start iterations
     for it in range(nt):
         # In the following inner loop ix will iterate 1 to nx-1 included
         for ix in range(1, nx-1):
-            phi[ix]=0.5*c*(c-1)*phiOld[ix+1] + (1-(c**2))*phiOld[ix] + \
-            0.5*c*(1+c)*phiOld[ix-1]
+            phi[ix]=b1*phiOld[ix+1] + b0*phiOld[ix] + \
+            b_1*phiOld[ix-1]
 
         #we apply periodic boundary conditions
-        phi[0]=0.5*c*(c-1)*phiOld[1] + (1-(c**2))*phiOld[0] + \
-        0.5*c*(1+c)*phiOld[nx-2]
+        phi[0]=b1*phiOld[1] + b0*phiOld[0] + \
+        b_1*phiOld[nx-2]
         phi[nx-1]=phi[0]
 
         # Get phiOld ready for the next loop
@@ -184,7 +187,6 @@ def FTBS(phiOld, c, nt, calculateConservation=False):
            phiMeans[it]=mean(phi)
            phiVariances[it]=var(phi)
 
-
     return phi, phiMeans, phiVariances
 
 
@@ -227,14 +229,15 @@ def FTCS(phiOld, c, nt, calculateConservation=False):
     phiMeans=zeros(nt)
     phiVariances=zeros(nt)
 
+    c_half = c*0.5
     # Start iterations
     for it in range(nt):
         # In the following inner loop ix will iterate 1 to nx-1 included
         for ix in range(1, nx-1):
-            phi[ix]=phiOld[ix]-c*0.5*(phiOld[ix+1]-phiOld[ix-1])
+            phi[ix]=phiOld[ix] - c_half*(phiOld[ix+1]-phiOld[ix-1])
 
         #we apply periodic boundary conditions
-        phi[0]=phiOld[0]-c*0.5*(phiOld[1]-phiOld[nx-2])
+        phi[0]=phiOld[0] - c_half*(phiOld[1]-phiOld[nx-2])
         phi[nx-1]=phi[0]
 
         # Get phiOld ready for the next loop
