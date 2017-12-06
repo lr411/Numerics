@@ -28,6 +28,27 @@ import initialConditions as ic
 import advectionSchemes as ad
 import diagnostics as dg
 
+def plotComparison2(x, nt, nx, c, phi, phiExact, methodName):
+    """
+    Plot exact phi vs phi from any method described with name methodName
+    difference from plotComparison is that plots are designed to be all in one
+    inputs are:
+    x (vector of float): vector of x-axis values
+    nt (int): nr of time steps
+    nx (int): nr of space points
+    c (float): Courant number
+    phi (array of floats): numerical scheme solution
+    phiExact (array of floats): exact solution
+    methodName (string): string containing the method name
+
+    output:
+    phiExact (array of floats): exact solution after nt time steps 
+    """    
+    plt.plot(x, phiExact)
+
+    plt.plot(x, phi, label=methodName)
+    plt.ylim([-0.2, 1.4])
+
 def plotComparison(x, nt, nx, c, phi, phiExact, methodName):
     """
     Plot exact phi vs phi from any method described with name methodName
@@ -80,6 +101,133 @@ def getExactSoln(phi_ic, c, nt):
     phiExact[dimx-1] = phiExact[0]
     
     return phiExact
+
+
+def runAllSchemes2(x, phi_ic, nx, nt, c, display=False):
+    """
+    Analysis of linear advection equation using numerical schemes
+                           taken from file advectionSchemes
+    difference from runAllSchemes is that this plots everything into one graph
+    This file runs the following schemes:
+        "FTBS", "CTCS", "CNCS", "LaxWendroff", 
+    L2 norm errors of exact solution vs numerical solution
+    are returned.
+    
+    inputs are:
+    x (vector of float): vector of x-axis values
+    phi_ic (array of floats): initial condition on phi
+    nx (int): nr of space points
+    nt (int): nr of time steps
+    c (float): Courant number
+    display (bool default=False): indicates wether we want to see \
+           graphs/prints
+    
+    output:
+    errors (array of float): array containing the L2norm error \
+       of the schemes
+    times (array of floats): array containing estimated time of execution
+       of function calls to each numerical method
+    """
+    # we initialise the errors vector to [], and then we will append data
+    # although it is slightly inefficient not to have the exact size
+    # of the error vector, it is a small inefficiency, since we will only
+    # run 4-5 schemes, but it's much more flexible and less error prone
+    # if we add more schemes
+    errors = []
+    
+    # vector containing execution times of all schemes
+    executionTimes = []
+
+    # calculate exact solution
+    phiExact = getExactSoln(phi_ic, c, nt)
+
+    # now we run and plot some schemes together with the exact solution\
+    # the name of the scheme is each time in the variable methodName
+    
+    if(display):
+        plt.figure()
+    
+    methodName = "FTBS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
+    phi, _, _ = ad.FTBS(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
+    if(display):
+       plotComparison2(x, nt, nx, c, phi, phiExact, methodName)
+    # Calculate norm of error phi phiExact
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2))
+    
+    methodName = "CTCS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
+    phi, _, _ = ad.CTCS(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
+    if(display):
+       plotComparison2(x, nt, nx, c, phi, phiExact, methodName)
+    # Calculate norm of error phi phiExact
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2))    
+    
+    methodName = "CNCS"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
+    phi, _, _ = ad.CNCS(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
+    if(display):
+       plotComparison2(x, nt, nx, c, phi, phiExact, methodName)
+    # Calculate norm of error phi phiExact
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2))    
+    
+    methodName = "LaxWendroff"
+    # make a local copy every time because things get dirty after use
+    # and we don't want to corrupt phi_ic because we'll use it again
+    phi_ic_local = phi_ic.copy()
+    # start clocking
+    start_time = timeit.default_timer()
+    phi, _, _ = ad.LaxWendroff(phi_ic_local, c, nt)
+    # check elapsed time
+    elapsed = timeit.default_timer() - start_time
+    executionTimes = np.append(executionTimes, elapsed)
+    if(display):
+       plotComparison2(x, nt, nx, c, phi, phiExact, methodName)
+    # Calculate norm of error phi phiExact
+    norm2 = dg.l2ErrorNorm(phi, phiExact)
+    errors = np.append(errors,norm2)
+    if(display):
+       print("L2 error of "+methodName+": "+str(norm2)) 
+
+    if(display):
+        plt.title("Exact vs Numerical solution "\
+              "nt="+str(nt)+", nx="+str(nx)+"\n"
+              "Courant number: "+str(c))
+        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        plt.show()
+
+    
+    return errors, executionTimes 
 
 
 def runAllSchemes(x, phi_ic, nx, nt, c, display=False):
@@ -233,6 +381,28 @@ def main(nx, nt, c, displayResults = False):
           runAllSchemes(x, phi_ic, nx, nt, c, displayResults)
     
     return errorsSmooth, timesSmooth, errorsSq, timesSq
+
+def checkMonotonicity(nx, nt, c, displayResults = False):
+    """
+    Analysis of monotonicity for linear advection equation using
+    numerical schemes taken from file advectionSchemes
+    This file takes 2 initial conditions and runs the routine 
+    runAllSchemes (see for reference), that will run and plot
+    the schemes: "FTBS", "CTCS", "CNCS", "LaxWendroff"
+    
+    inputs are:
+    nx (int): nr of steps on the x-axis
+    nt (int): nr of time steps
+    c (float): Courant number
+    displayResults (bool, default=False): indicates wether to display results    
+    """
+    #use square wave to force dispersion errors
+    # initialize the vector of space points, our domain is [0,1]
+    x = np.linspace(0,1,nx)
+
+    phi_ic = ic.squareWave(x, 0, 0.5)    
+    _, _ = \
+          runAllSchemes2(x, phi_ic, nx, nt, c, displayResults)
 
 
 def runErrorTests(c, startNx, endNx, stepNx=1, display=False):
@@ -447,18 +617,19 @@ def runLinAdvec():
     """
     # Courant number    
     c = 0.4
-
     """
     #just run and print, for two different Courant numbers
     main(50, 50, c, displayResults = True)
     main(400, 400, c, displayResults = True)
     print("\n")
+
     # check mass conservation
     checkConservation(400, 400, c, display=True)
     # run order of convergence tests
-    runErrorTests(c, 50, 500, stepNx=50, display=True)
-    """
+    runErrorTests(c, 300, 1000, stepNx=50, display=True)
     # run timing tests
     runTimingTests(c, 50, 600, stepNx=50, displayResults=True)
-
+    """
+    checkMonotonicity(50, 50, c, displayResults = True)
+    
 runLinAdvec()
