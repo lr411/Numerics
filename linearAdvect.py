@@ -459,6 +459,6 @@ def runLinAdvec():
     runErrorTests(c, 50, 500, stepNx=50, display=True)
     """
     # run timing tests
-    runTimingTests(c, 200, 600, stepNx=50, displayResults=True)
+    runTimingTests(c, 50, 600, stepNx=50, displayResults=True)
 
 runLinAdvec()

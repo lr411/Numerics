@@ -28,7 +28,7 @@ We have estimated the computational cost timing code execution of the numerical 
 	\begin{center}
 		\includegraphics[width=4in]{graphics/Timing.png}
 	\end{center}%
-	\caption[computational cost of numerical methods]{ \em Estimated execution time vs nx, for the numerical methods. Log-log plot has been used for estimation of the order of magnitude of the dependency.}
+	\caption[computational cost of numerical methods]{ \em Estimated execution time vs nx, for the numerical methods with log-log plots.  $nx\in [200, 550]$, increased in steps of 50.}
 	\label{fig:timing}
 \end{figure}
 
@@ -45,6 +45,30 @@ The results are close to the theoretical ones.
 
 \subsubsection{Computational cost}
 \label{sec:compcost}
-We have estimated the computational cost of the various numerical methods, timing code execution with the "timeit.default_timer()" Python routine, that returns the fraction of seconds a code has taken to run, measured between two calls to default_timer().
-of the numerical methods and the following is a figure showing the estimated dependency of the order of magnitude of the time taken to execute the code vs nx, details of the experiment will be given in \ref{sec:compcost}. The LaxWendroff method proves to be particularly expensive, whereas the CNCS, although it involves handling matrices, has been the fastest algorithm, most probably thanks to the efficiency of the sparse matrices Python library.
+We have estimated the computational cost of the various numerical methods, timing code execution with the timeit Python library, that returns the fraction of seconds a code has taken to run, measured between two calls to \texttt{default\_Dist\_timer()}.
+To estimate the order of magnitude in the relationship time vs nx, we have used log-log plots, and fitted the resulting curves with a line. In addition to the experiment in figure \ref{fig:timing}, that shows the execution of consecutive runs varying $nx\in [200, 550]$, with a step of 50, we have tried to "push" the system further, with an additional run $nx\in [400, 950]$ with a step of 50, and result remain fairly consistent.
+What we have found is that The LaxWendroff and CTCS methods prove to be particularly expensive computationally, with an estimated order 2 of magnitude increase of time wrt nx, whereas the CNCS, although it involves handling matrices, has been the fastest algorithm, with estimated order 1.5, most probably thanks to the efficiency of the sparse matrices Python library.
 
+Results of fit for $nx\in [200, 550]$ (see fig \ref{fig:timing})
+\begin{itemize}
+	\item FTBS: 1.84
+	\item CTCS: 1.94
+	\item CNCS: 1.42
+	\item LaxWendroff: 2.08
+\end{itemize}
+
+Results of fit for $nx\in [400, 950]$ (see fig \ref{fig:timing2})
+\begin{itemize}
+\item FTBS: 1.89
+\item CTCS: 2.00
+\item CNCS: 1.57
+\item LaxWendroff: 1.98
+\end{itemize}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Timing2.png}
+	\end{center}%
+	\caption[computational cost of numerical methods]{ \em Estimated execution time vs nx, for the numerical methods with log-log plots.  $nx\in [400, 950]$, increased in steps of 50.}
+	\label{fig:timing2}
+\end{figure}
