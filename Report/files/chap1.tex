@@ -24,7 +24,7 @@ Equation (\ref{eq:ctcs}) describes the time evolution of CTCS. The scheme is sec
 \phi_j^{n+1}=\frac{c}{2}(c+1)\phi_{j-1}^{n}+(1-c^2)\phi_{j}^{n}+\frac{c}{2}(c+1)\phi_{j+1}^{n}
 \label{eq:laxwendroff}
 \end{equation}
-Equation (\ref{eq:laxwendroff}) describes the time evolution of LaxWendroff method. The method is second order accurate in space and time and, does not add spurious computational modes: in the LaxWendroff case (unlike CTCS), in the CFL criterion analysis, the domain of convergence study of the numerical scheme leaves no "open" points, there is only one physical solution. It can be shown, that the method is stable for $c\in[-1,1]$, in fact it can be shown, that the amplification factor in the Von Neumann analysis is:
+Equation (\ref{eq:laxwendroff}) describes the time evolution of LaxWendroff method. The method is second order accurate in space and time and, does not add spurious computational modes: in the LaxWendroff case (unlike CTCS), in the CFL criterion analysis, the domain of convergence study of the numerical scheme leaves no "open" points, there is only one physical solution. The method is stable for $c\in[-1,1]$, in fact it can be shown that the amplification factor in the Von Neumann analysis is:
 \begin{equation}
 \label{eq:laxwen_vonneumann}
 A=(1+c^2(cos(k\Delta x)-1))-icsin(k\Delta x)

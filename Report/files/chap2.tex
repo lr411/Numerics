@@ -2,7 +2,7 @@
 
 
 \section{Results}
-In the experiments, both time and space vary in [0,1], and the number of space points has been kept equal to the number of time points in the simulations, for simplicity and to allow comparisons among multiple runs, keeping the Courant number constant, and avoiding rounding errors.
+In the experiments, both time and space vary in [0,1], and the number of space points has been kept equal to the number of time points in the simulations, for simplicity and to allow comparisons among multiple runs, keeping the Courant number constant, and avoiding rounding errors. The commit id of the code this document refers to is: dcf5c7409ef982076a5646573eaca61501217049.
 
 \subsection{General results}
 
@@ -44,9 +44,6 @@ We have tested monotonicity of the schemes using an initial condition with disco
 	\label{fig:mono}
 \end{figure}
 
-\subsubsection{Conservation of mass}
-All the numerical schemes used conserve mass, subject to periodic boundary conditions, as we have used in our experiments. Details of the experiments can be fount in section 
-
 \subsection{Order of accuracy}
 To test the order of accuracy, 10 runs have been made of the 4 schemes, keeping the Courant number constant throughout, and varying nx, keeping nt=nx to avoid rounding errors. The function $sin(4\pi x)$ has been used as initial condition, it's smooth and with a single frequency and therefore does not suffer from dispersion errors that could affect the error.
 The results of the runs are shown in figure \ref{fig:orderofacc} , and the estimated order of accuracy for the methods is as follows:
@@ -77,8 +74,8 @@ We have tried a more "aggressive" run, with higher nx, and results remain fairly
 
 \subsection{Computational cost}
 \label{sec:compcost}
-We have estimated the computational cost of the various numerical methods, timing code execution with the timeit Python library, that returns the fraction of seconds a code has taken to run, measured between two calls to \texttt{default\_Dist\_timer()}. The initial condition is irrelevant for this test therefore it is omitted which one has been used.
-To estimate the order of magnitude in the relationship time vs nx, we have used log-log plots, and fitted the resulting curves with a line. In addition to the experiment in figure \ref{fig:timing}, that shows the execution of consecutive runs varying $nx\in [200, 550]$, with a step of 50, we have tried to "push" the system further, with an additional run $nx\in [400, 950]$ with a step of 50, and result remain fairly consistent.
+We have estimated the computational cost of the various numerical methods, timing code execution with the timeit Python library, that returns the fraction of seconds a code has taken to run, measured between two calls to \texttt{default\_Dist\_timer()}. The initial condition is irrelevant for this test therefore it is omitted.
+To estimate the order of magnitude in the relationship time vs nx, we have used log-log plots, and fit the resulting curves with a line. In addition to the experiment in figure \ref{fig:timing}, that shows the execution of consecutive runs varying $nx\in [200, 550]$, with a step of 50, we have tried to "push" the system further, with an additional run $nx\in [400, 950]$ with a step of 50, and result remain fairly consistent.
 What we have found is that The LaxWendroff and CTCS methods prove to be particularly expensive computationally, with an estimated order 2 of magnitude increase of time wrt nx, whereas the CNCS, although it involves handling matrices, has been the fastest algorithm, with estimated order 1.5, most probably thanks to the efficiency of the sparse matrices Python library.
 
 Results of fit for $nx\in [200, 550]$ (see fig \ref{fig:timing})
