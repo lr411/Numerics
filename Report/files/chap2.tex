@@ -22,6 +22,16 @@ The following figure \ref{fig:orderofacc} shows the results of the experiment of
 	\label{fig:orderofacc}
 \end{figure}
 
+\subsubsection{Computational cost}
+We have estimated the computational cost timing code execution of the numerical methods and the following is a figure showing the estimated dependency of the order of magnitude of the time taken to execute the code vs nx, details of the experiment will be given in \ref{sec:compcost}. The LaxWendroff method proves to be particularly expensive, whereas the CNCS, although it involves handling matrices, has been the fastest algorithm, most probably thanks to the efficiency of the sparse matrices Python library.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Timing.png}
+	\end{center}%
+	\caption[computational cost of numerical methods]{ \em Estimated execution time vs nx, for the numerical methods. Log-log plot has been used for estimation of the order of magnitude of the dependency.}
+	\label{fig:timing}
+\end{figure}
+
 \subsection{Order of accuracy}
 To test the order of accuracy, 10 runs have been made of the 4 schemes, keeping the Courant number constant throughout, and varying nx, keeping nt=nx to avoid rounding errors. The function $sin(4\pi x)$ has been used as initial condition, it's smooth and with a single frequency and therefore does not suffer from dispersion errors that could affect the error.
 The results of the runs are shown in figure \ref{fig:orderofacc} , and the estimated order of accuracy for the methods is as follows:
@@ -32,4 +42,9 @@ The results of the runs are shown in figure \ref{fig:orderofacc} , and the estim
 \item LaxWendroff: 1.79
 \end{itemize}
 The results are close to the theoretical ones.
+
+\subsubsection{Computational cost}
+\label{sec:compcost}
+We have estimated the computational cost of the various numerical methods, timing code execution with the "timeit.default_timer()" Python routine, that returns the fraction of seconds a code has taken to run, measured between two calls to default_timer().
+of the numerical methods and the following is a figure showing the estimated dependency of the order of magnitude of the time taken to execute the code vs nx, details of the experiment will be given in \ref{sec:compcost}. The LaxWendroff method proves to be particularly expensive, whereas the CNCS, although it involves handling matrices, has been the fastest algorithm, most probably thanks to the efficiency of the sparse matrices Python library.
 

@@ -435,7 +435,7 @@ def runTimingTests(c, startNx, endNx, stepNx, displayResults = False):
            coeff = np.polyfit(logNxs,logTimes[i],1)
            print("Estimated order of magnitude time vs nx "\
                  +methods[i]+": "+str(coeff[0]))
-       plt.title("Log-log plot time of execution in ms vs nx\nc="+str(c))
+       plt.title("Log-log plot time of execution in s vs nx\nc="+str(c))
        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
        plt.show()    
     
