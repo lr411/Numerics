@@ -500,6 +500,31 @@ def plotConservation(nt, massesVector, varianceVector, methodName):
     print("Average of variances: "+str(meanOfVars))
     print("Variance of variances: "+str(varOfVars))
     
+def plotConservation2(c, nt, massesVector, methodName):
+    """
+    plot of mass and variance conservation for the numerical scheme \
+    described by methodName
+    inputs are:
+    c (float): Courant number
+    nt (int): nr of time steps
+    massesVector (array of floats): array containing the measured mean \
+          at each time step
+    methodName: string containing the name of the numerical method
+    """
+    # generate vector of time for plots
+    timeVector = range(0, nt)
+    
+    plt.plot(timeVector, massesVector, label=methodName)
+    plt.title("Mass vs time step\nc="+str(c))
+    
+    # calculate mean and variance around mean of the means
+    meanOfMeans = np.mean(massesVector)
+    varOfMeans = np.var(massesVector)
+    
+    # print results
+    print("Average of mean: "+str(meanOfMeans))
+    print("Variance of mean: "+str(varOfMeans))    
+
 
 def checkConservation(nx, nt, c, display=False):
     """
@@ -517,9 +542,13 @@ def checkConservation(nx, nt, c, display=False):
     x = np.linspace(0, 1, nx)
     
     # we use a smooth function
-    phi_ic = ic.mySineFctn(x)
+    phi_ic = ic.mySineFctn(x)  
 
-    # now we run and plot mass and variance conservation
+
+    if(display):
+       plt.figure()
+       
+    # now we run and plot mass conservation
     # the name of the scheme is each time in the variable methodName
     
     methodName = "FTBS"
@@ -527,11 +556,11 @@ def checkConservation(nx, nt, c, display=False):
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
     
-    _, phiMean, phiVar = ad.FTBS(phi_ic_local, c, nt, \
+    _, phiMean, _ = ad.FTBS(phi_ic_local, c, nt, \
                                    calculateConservation=True)
     
     if(display):
-       plotConservation(nt, phiMean, phiVar, methodName)
+       plotConservation2(nt, phiMean, methodName)
 
     
     methodName = "CTCS"
@@ -539,11 +568,11 @@ def checkConservation(nx, nt, c, display=False):
     # and we don't want to corrupt phi_ic because we'll use it again
     phi_ic_local = phi_ic.copy()
     
-    _, phiMean, phiVar = ad.CTCS(phi_ic_local, c, nt, \
+    _, phiMean, _ = ad.CTCS(phi_ic_local, c, nt, \
                                    calculateConservation=True)
     
     if(display):
-       plotConservation(nt, phiMean, phiVar, methodName)
+       plotConservation2(nt, phiMean, methodName)
 
     
     methodName = "CNCS"
@@ -568,6 +597,12 @@ def checkConservation(nx, nt, c, display=False):
     
     if(display):
        plotConservation(nt, phiMean, phiVar, methodName)
+
+    if(display):
+       plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+       plt.show()
+
+
 
 
 def runTimingTests(c, startNx, endNx, stepNx, displayResults = False):
@@ -623,13 +658,14 @@ def runLinAdvec():
     main(400, 400, c, displayResults = True)
     print("\n")
 
-    # check mass conservation
-    checkConservation(400, 400, c, display=True)
     # run order of convergence tests
     runErrorTests(c, 300, 1000, stepNx=50, display=True)
     # run timing tests
     runTimingTests(c, 50, 600, stepNx=50, displayResults=True)
-    """
+    # check monotonicity
     checkMonotonicity(50, 50, c, displayResults = True)
+    """
+    # check mass conservation
+    checkConservation(400, 400, c, display=True)
     
 runLinAdvec()
