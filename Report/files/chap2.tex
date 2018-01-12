@@ -1,28 +1,137 @@
-%Chapter CTCS method
+%Chapter Results
 
 
-The second method to be explored is CTCS. Characteristics of the method can be found in \cite{mpebook}.
+\section{Results}
+In the experiments, both time and space vary in [0,1], and the number of space points has been kept equal to the number of time points in the simulations, for simplicity and to allow comparisons among multiple runs, keeping the Courant number constant, and avoiding rounding errors. The commit id of the code this document refers to is: dcf5c7409ef982076a5646573eaca61501217049.
+
+\subsection{General results}
+
+\subsubsection{Order of accuracy}
+As described in the previous parts of this document, the theoretical order of accuracy of the numerical schemes used is, respectively:
+\begin{itemize}
+	\item FTBS: 1
+	\item CTCS: 2
+	\item Lax Wendroff: 2
+	\item CNCS: 2
+\end{itemize}
+The following figure \ref{fig:orderofacc} shows the results of the experiment of 10 runs of the 4 schemes, with nt and nx varying between 50 and 500, with a step of 50.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Accuracy.png}
+	\end{center}%
+	\caption[Order of accuracy of numerical methods]{ \em Estimated order of accuracy of numerical methods versus the size of $\Delta x$, with nt and nx varying between 50 and 450, with a step of 50}
+	\label{fig:orderofacc}
+\end{figure}
+Results are in line with what expected, with FTBS having estimated order close to 1, and the other schemes estimated order close to 1.7.
+
+\subsubsection{Computational cost}
+We have estimated the computational cost timing code execution of the numerical methods and the following is a figure showing the estimated dependency of the order of magnitude of the time taken to execute the code vs nx, details of the experiment will be given in \ref{sec:compcost}. The LaxWendroff method proves to be particularly expensive, whereas the CNCS, although it involves handling matrices, has been the fastest algorithm, most probably thanks to the efficiency of the sparse matrices Python library.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Timing.png}
+	\end{center}%
+	\caption[computational cost of numerical methods]{ \em Estimated execution time vs nx, for the numerical methods with log-log plots.  $nx\in [200, 550]$, increased in steps of 50.}
+	\label{fig:timing}
+\end{figure}
+
+\subsubsection{Monotonicity}
+We have tested monotonicity of the schemes using an initial condition with discontinuities, results are as expected and FTBS is the only scheme that does not add new extrema, as shown in fig \ref{fig:mono}.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Monotonicity.png}
+	\end{center}%
+	\caption[Monotonicity]{ \em Execution of all schemes with a square wave i.c.}
+	\label{fig:mono}
+\end{figure}
+
+\subsection{Order of accuracy}
+To test the order of accuracy, 10 runs have been made of the 4 schemes, keeping the Courant number constant throughout, and varying nx, keeping nt=nx to avoid rounding errors. The function $sin(4\pi x)$ has been used as initial condition, it's smooth and with a single frequency and therefore does not suffer from dispersion errors that could affect the error.
+The results of the runs are shown in figure \ref{fig:orderofacc} , and the estimated order of accuracy for the methods is as follows:
+\begin{itemize}
+\item FTBS: 0.91
+\item CTCS: 1.80
+\item CNCS: 1.79
+\item LaxWendroff: 1.79
+\end{itemize}
+The results are close to the theoretical ones.
+
+We have tried a more "aggressive" run, with higher nx, and results remain fairly consistent (as shown in fig \ref{fig:orderofacc2}):
+\begin{itemize}
+	\item FTBS: 0.97
+	\item CTCS: 1.74
+	\item CNCS: 1.74
+	\item LaxWendroff: 1.73
+\end{itemize}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Accuracy2.png}
+	\end{center}%
+	\caption[Order of accuracy of numerical methods]{ \em Estimated order of accuracy of numerical methods versus the size of $\Delta x$, with nt and nx varying between 300 and 950, with a step of 50}
+	\label{fig:orderofacc2}
+\end{figure}
 
 
-\section{General characteristics}
-We will explore the characteristics of the CTCS method.
+\subsection{Computational cost}
+\label{sec:compcost}
+We have estimated the computational cost of the various numerical methods, timing code execution with the timeit Python library, that returns the fraction of seconds a code has taken to run, measured between two calls to \texttt{default\_Dist\_timer()}. The initial condition is irrelevant for this test therefore it is omitted.
+To estimate the order of magnitude in the relationship time vs nx, we have used log-log plots, and fit the resulting curves with a line. In addition to the experiment in figure \ref{fig:timing}, that shows the execution of consecutive runs varying $nx\in [200, 550]$, with a step of 50, we have tried to "push" the system further, with an additional run $nx\in [400, 950]$ with a step of 50, and result remain fairly consistent.
+What we have found is that The LaxWendroff and CTCS methods prove to be particularly expensive computationally, with an estimated order 2 of magnitude increase of time wrt nx, whereas the CNCS, although it involves handling matrices, has been the fastest algorithm, with estimated order 1.5, most probably thanks to the efficiency of the sparse matrices Python library.
 
-\subsection{Conservation of mass} \label{conservationctcs}
+Results of fit for $nx\in [200, 550]$ (see fig \ref{fig:timing})
+\begin{itemize}
+	\item FTBS: 1.84
+	\item CTCS: 1.94
+	\item CNCS: 1.42
+	\item LaxWendroff: 2.08
+\end{itemize}
 
-\subsection{Stability} \label{stabilityctcs}
+Results of fit for $nx\in [400, 950]$ (see fig \ref{fig:timing2})
+\begin{itemize}
+\item FTBS: 1.89
+\item CTCS: 2.00
+\item CNCS: 1.57
+\item LaxWendroff: 1.98
+\end{itemize}
 
-
-\subsection{Accuracy}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/Timing2.png}
+	\end{center}%
+	\caption[computational cost of numerical methods]{ \em Estimated execution time vs nx, for the numerical methods with log-log plots.  $nx\in [400, 950]$, increased in steps of 50.}
+	\label{fig:timing2}
+\end{figure}
 
 \subsection{Monotonicity}
+\label{sec:mono}
+We have tested the monotonicity of the numerical schemes, using the following i.c.:
+\begin{equation}
+\phi_0(t)=\left\{
+\begin{array}{lr}
+1 & 0<x<\frac{1}{2} \\
+0 &  elsewhere \\
+\end{array}
+\right.
+\label{eq:initcondsquare}
+\end{equation}
+We have run the test for all schemes plotting the results against the true result. In fig \ref{fig:mono} we can see that, as expected, FTBS is the only method that does not add new extrema being damping and diffusive, whereas all other methods have oscillations that cause new extrema to appear.
 
-\subsection{Dispersion errors}
+\subsection{Dispersion}
+Experiments to check dispersion have been carried out. Figure \ref{fig:mono} shows the behaviour of the schemes under a discontinuous initial condition, see eq. \ref{eq:initcondsquare}.
+We can see in particular that LaxWendroff method suffers from dispersion problems due to waves travelling too slowly, as shown in \cite{mpebook}: we can see in figures \ref{fig:laxgood} and \ref{fig:laxbad} that oscillations are ahead of the discontinuity, showing that waves with high frequency are resolved poorly; in addition, increasing the resolution, keeping c constant, has improved significantly waves resolution, in fact, at low $k\Delta x$, in figure 5.9 of \cite{mpebook}, we are close to the wave velocities of the exact solution.
 
-\subsection{Diffusion errors}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/LaxWenGood.png}
+	\end{center}%
+	\caption[LaxWen]{ \em Lax Wendroff with i.c. (\ref{eq:initcondsquare}), L2 error=0.1}
+	\label{fig:laxgood}
+\end{figure}
 
-\subsection{Computational modes}
-
-\subsection{Computational Cost}
-
-\subsection{Variable resolution}
-
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/LaxWenBad.png}
+	\end{center}%
+	\caption[LaxWen]{ \em Lax Wendroff with i.c. (\ref{eq:initcondsquare}), L2 error=0.19}
+	\label{fig:laxbad}
+\end{figure}

@@ -1,32 +1,31 @@
-%Chapter Python
+%Chapter Results
 
 
-\section{General characteristics}
-In this section we will explain the python implementation of the numerical schemes. 
-Currently the implementation consists of 4 files, each implementing one of the following:
-\begin{itemize}
-	\item Main file used to run the project
-	\item Initial condition file, stores different possible choices of initial conditions that can be used to test different properties
-	\item Advection schemes file
-	\item Diagnostics functions file
-\end{itemize}
+\section{Conclusions}
+The numerical schemes FTBS, CTCS, Lax Wendroff and CNCS have been presented in this work. The Lax Wendroff scheme among the explicit methods guarantees higher order of accuracy and absence of computational modes, but has proven computationally expensive as seen in section \ref{sec:compcost}, the CNCS is the implicit method, among those tested, that guarantees unconditional stability and second order accuracy in time and space. The CNCS has also shown significant advantages for the speed of execution, as seen in section \ref{sec:compcost}, most probably thanks to the fast sparse matrices algorithms used by python.
+As shown in figure \ref{fig:laxFinal} and \ref{fig:cncsFinal}, both methods approximate well the original solution, in the case of a smooth i.c.
+\begin{equation}
+\phi_0(t)=\left\{
+\begin{array}{lr}
+\frac{1}{2}(1-cos(4\pi x)) & 0\leq x<\frac{1}{2} \\
+0 &  \frac{1}{2}\leq x\leq 1 \\
+\end{array}
+\right.
+\label{eq:initcondcos}
+\end{equation}
+ 
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/LaxWenFinal.png}
+	\end{center}%
+	\caption[LaxWenFinal]{ \em i.c. used is eq (\ref{eq:initcondcos}). L2 norm of error = 0.0008}
+	\label{fig:laxFinal}
+\end{figure}
 
-\section{Code Repository}
-The code repository is:\\
-https://github.com/lr411/Numerics.git\\
-The hash of the commit the report refers to for the code part, is:\\
-43f4315e753289bfaab8d4c84fa88d7124c732dc
-
-
-\section{Advection Schemes Implementation}
-The function used for the method is in the file advectionSchemes.py, and the function in the code is the following, with comments included on the meaning of inputs:
-\begin{lstlisting}
-def FTCS(phiOld, c, nt):    
-"Linear advection scheme using FTCS, with Courant number c and"
-"                       nt time-steps"
-"inputs are:"
-"phiOld: initial condition on phi (to save space the array will then"\
-"               be used to store values from the previous time step)"
-"c: Courant number"
-"nt: nr of time steps"
-\end{lstlisting}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=4in]{graphics/CNCSfinal.png}
+	\end{center}%
+	\caption[CNCS final]{ \em i.c. used is eq (\ref{eq:initcondcos}). L2 norm of error = 0.001}
+	\label{fig:cncsFinal}
+\end{figure}

@@ -1,43 +1,29 @@
-Good, concise report.
+Good start but it looks as if you have a long way to go.
 
-Avoid file names with spaces in so that you can collaborate with people who use scripts to manipulate files.
+Use latex article documentclass rather than report. You don't need a title page, chapters, abstract or table of contents. 
 
-Your equation 1 is not correct. For a multi-dimensional equation, use notation that makes it clear that u is a vector (make it bold, like you have done for x). Also, you need to take the dot product between vector u and grad(phi).
+You need to consider a better scheme than FTBS and CTCS. Look in chapter 6 of the lecture notes for ideas. 
 
-Avoid blank lines after equations in latex unless you want a new paragraph.
+The initial conditions should be included in the experiment description, not in the description of FTBS. 
 
-In section 1 you might as well give the equation for the analytic solution.
+You do not need to consider so many numerical properties. 
 
-Section 2, typo "constucte".
+The point of this assignment is comparison of schemes so consider your chosen numerical properties with respect to all the numerical methods together. 
 
-Your equation at the beginning of 2.1 makes it sound as if FTBS is the only explicit model. 
+Define all schemes in full before you present results. 
 
-You should clarify that eqn 3 is an approximation for dphidt at time n, position j and eqn 4 is an approximation for dphidx at time n, position j. 
+Before you present results, define all experiments and simulations in full, giving enough information so that someone else could reproduce your results with their code and without reference to your code.
 
-You do not know that FTBS will have large errors just because it is first-order accurate. All you know that the errors will converge to zero proportional to dx^1 and dt^1. But this doesn't tell you about the constant of proportionality.
+Figure 1.1 does not show you that FTBS is first-order accurate, it shows you that FTBS is diffusive. In order to find the order of convergence of a scheme you need to run it with different resolutions (note, keep the Courant number and the total simulation constant when you vary dx and dt together).
 
-Cite the lecture notes for your statement that FTBS should conserve mass but note that exact conservation will only hold if you have periodic boundary conditions. 
+The numbers that you present in equations 1.3 and 1.4 are not useful. These should be presented in a graph for various values of dx and for all schemes together, showing order of convergence.
 
-About FTCS, if a scheme is only stable for c=0, this means that it is unconditionally unstable which is useless. As you already know that FTCS is unconditionally unstable, it is not worth including in your comparison.
+I would avoid trying to find evidence of computational modes in your results.
 
-CTCS does not look like an implicit method. Treatment of the first time-step does not change the time-stepping for the other time-steps. 
+In order to calculate computational cost, you can use various functions in Python to time your code. 
 
-You really need to chose a scheme that you think might work better that CTCS and FTBS in some aspect. These two are really the naive starting points. How about a scheme from chapter 6 of the lecture notes "Alternative Advection Schemes".
+Don't include your code in your report.
 
-Your sentence:
-"To determine if the schemes preserves mass, I simply calculate the area of the graphs and compare".
-is not clear. Remember that your report should make sense to someone who has not read the assignment sheet and has not read the lecture notes.
+Variable resolution means that dx is not uniform in space. I wouldn't recommend doing this.
 
-Your section "Method" is unnecessary. In the introduction say what numerical properties you are going to investigate and combine your description of experiments with the results.
-
-Define your experiments in sufficient detail so that someone else could reproduce your results with their code and without looking at your code. You haven't, for example, defined what initial or boundary conditions you are using. 
-
-Define you experiments in full before you present results. State what is presented in figure 2 before you discuss the content. 
-
-You don't cite figure 1 in the text. I would say that it is un-necessary. Define the initial conditions using an equation instead. I would recommend comparing solutions for two different initial conditions.
-
-I would say that table 1 is unnecessary, especially with so many decimal places. It would be more helpful to plot error norms on a log-log scale as a function of dx (keeping c and the final time constant for all dx).
-
-Typo "FTSBS".
-
-You will need to do another experiment or two to demonstrate the properties of your schemes.
+Omit chapter 3

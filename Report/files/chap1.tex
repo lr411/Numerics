@@ -1,72 +1,45 @@
-%Chapter  FTBS method
+%Chapter  Numerical methods
 
+\section{Numerical Methods}
+All the equations of the numerical methods presented in this chapter have been taken from \cite{mpebook} and \cite{nmnotes}. Meaning of symbols and statements, when not explicitly explained, are assumed also as in \cite{mpebook} and \cite{nmnotes}. Additional sources will be acknowledged when used throughout the chapter.
 
-The first method to be explored is FTBS. Characteristics of the method can be found in \cite{mpebook}.
-FTBS has been chosen as "naive" method to be compared to a more "sophisticathed" method and show the quantitative and qualitative differences.
-The initial conditions used are the following:
-\begin{equation}
-\phi_0(t)=\left\{
-\begin{array}{lr}
-\frac{1}{2}(1-cos(4\pi x)) & 0\leq x<\frac{1}{2} \\
-0 &  \frac{1}{2}\leq x\leq 1 \\
-\end{array}
-\right.
-\label{eq:initcondcos}
-\end{equation}
+\subsection{FTBS}
 
 \begin{equation}
-\phi_0(t)=\left\{
-\begin{array}{lr}
-1 & 0<x<\frac{1}{2} \\
-0 &  elsewhere \\
-\end{array}
-\right.
-\label{eq:initcondsquare}
+\phi_j^{n+1}=\phi_j^{n}-c(\phi_j^{n}-\phi_{j-1}^{n})
+\label{eq:ftbs}
 \end{equation}
-The function (\ref{eq:initcondcos}) can be used when smooth functions are needed, for example to test order of convergence. On the other hand, function with discontinuities, like the step function (\ref{eq:initcondsquare}) can be used to check monotonicity of the scheme.
+Equation (\ref{eq:ftbs}) describes the time evolution of FTBS. The scheme is first order accurate in time and space, and stable for $c\in[0,1]$. It conserves mass, is damping, diffusive and monotonic. It has been included in this report for it's "naivety", to be used as term of comparison with other, better performing schemes.
 
-\section{General characteristics}
-We will explore the characteristics of the FTBS method. Unless otherwise stated, the results used in this chapter will be taken without proof from \cite{mpebook} and \cite{nmnotes}. 
 
-\subsection{Conservation of mass} \label{conservationftbs}
-With reference to equation (\ref{eq:linadvec_initcondition}), the mass of $\phi$ is conserved under the linear advection in the exact solution and also in the FTBS numerical implementation, whereas the variance of $\phi$ is conserved only in the exact solution but not in the FTBS implementation. The variance decreases in FTBS, and this is consistent with what we will find in the subsection \ref{stabilityftbs}, that the method is damping.
-
-\subsection{Stability} \label{stabilityftbs}
-The FTBS method is stable for courant number $c\in[0,1]$
-
-\subsection{Accuracy}
-The FTBS method is first order accurate. We can see in figure \ref{fig:ftbsvsexact} a qualitative comparison of the output of FTBS scheme vs the exact solution, for initial condition (\ref{eq:initcondcos}).
-\begin{figure}[H]
-	\begin{center}
-		\includegraphics[width=4in]{graphics/FTBS_vs_exact.png}
-	\end{center}%
-	\caption[A comparison of FTBS vs exact solution.]{ \em A comparison of FTBS vs exact solution for initial condition (\ref{eq:initcondcos}). The blue line is the exact solution, the orange line is the output of the model}
-	\label{fig:ftbsvsexact}
-\end{figure}
-Error for the FTBS have be calculated using norms, the following are the results for $c=0.4$, $n_t=50$, $n_x=61$:
+\subsection{CTCS}
 \begin{equation}
-\mid\mid \phi_{FTBS} - \phi_{EXACT}\mid\mid_2=0.1223
-\label{eq:norm2ftbs}
+\phi_j^{n+1}=\phi_j^{n}-c(\phi_{j+1}^{n}-\phi_{j-1}^{n})
+\label{eq:ctcs}
 \end{equation}
+Equation (\ref{eq:ctcs}) describes the time evolution of CTCS. The scheme is second order accurate in time and space, and stable for $c\in[-1,1]$. The method introduces some computational modes.
+
+\subsection{LaxWendroff}
 \begin{equation}
-\mid\mid \phi_{FTBS} - \phi_{EXACT}\mid\mid_{\infty}=0.1159
-\label{eq:norminfftbs}
+\phi_j^{n+1}=\frac{c}{2}(c+1)\phi_{j-1}^{n}+(1-c^2)\phi_{j}^{n}+\frac{c}{2}(c+1)\phi_{j+1}^{n}
+\label{eq:laxwendroff}
 \end{equation}
+Equation (\ref{eq:laxwendroff}) describes the time evolution of LaxWendroff method. The method is second order accurate in space and time and, does not add spurious computational modes: in the LaxWendroff case (unlike CTCS), in the CFL criterion analysis, the domain of convergence study of the numerical scheme leaves no "open" points, there is only one physical solution. The method is stable for $c\in[-1,1]$, in fact it can be shown that the amplification factor in the Von Neumann analysis is:
+\begin{equation}
+\label{eq:laxwen_vonneumann}
+A=(1+c^2(cos(k\Delta x)-1))-icsin(k\Delta x)
+\end{equation}
+and the condition on $|A|\leq1$ brings the constraint $c\in[-1,1]$.
 
-\subsection{Monotonicity}
-The FTBS is monotonic, it does not add new maxima, it can be seen qualitatively from figure \ref{fig:ftbsvsexact}.
+\subsection{CNCS}
+\begin{equation}
+\phi_j^{n+1}=\phi_j^{n}-\frac{c}{4}(\phi_{j+1}^{n+1}-\phi_{j-1}^{n+1}+\phi_{j+1}^{n}-\phi_{j-1}^{n})
+\label{eq:cncs}
+\end{equation}
+Equation (\ref{eq:cncs}) describes the time evolution of CNCS. The scheme is implicit and second order accurate in time and space, and stable for $c\in\mathbb{R}$. It has been added for its unconditional stability. In fact the amplification factor, in the Von Neumann analysis is the following:
+\begin{equation}
+\label{eq:cncs_vonneumann}
+A=\frac{2-icsin(k\Delta x)}{2+icsin(k\Delta x)}
+\end{equation}
+and $|A|=1$ unconditionally.
 
-\subsection{Dispersion errors}
-
-\subsection{Diffusion errors}
-
-\subsection{Computational modes}
-What are these??? I read they refer to nothing specifically, but in general to modes that can be either physical or coming from numerical implementations. Not sure I understood how to compute these.
-
-\subsection{Computational Cost}
-Details of the code used for computing the FTBS scheme can be found in chapter \ref{chap:pythonimplementation}.
-
-Do we calculate the cost by memory consumption, time of execution..., and if so, do we do a qualitative analysis such as which order of magnitude these quantities are???
-
-\subsection{Variable resolution}
-What does this mean specifically???

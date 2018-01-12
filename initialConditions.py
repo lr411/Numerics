@@ -16,8 +16,10 @@ def squareWave(x,alpha,beta):
     a distance dx/2 either side of x
     """
     
-    phi = np.zeros_like(x)
-    
+    dimx = len(x)    
+
+    phi = np.zeros(dimx)
+        
     # The grid spacing (assumed uniform)
     dx = x[1] - x[0]
     
@@ -29,6 +31,7 @@ def squareWave(x,alpha,beta):
         
         #integral quantity of phi
         phi[j] = max((min(beta, xe) - max(alpha, xw))/dx, 0)
+
 
     return phi
 
@@ -42,9 +45,24 @@ def cosineBasedFctn(x, alpha):
     alpha: a constant used in the function definition (see above)
     """
     
-    phi = np.zeros_like(x)
+    dimx = len(x)    
+
+    phi = np.zeros(dimx)
     
     phi= np.where (x<alpha, 0.5*(1-np.cos(4*np.pi*x)), 0)
     
     return phi
 
+def mySineFctn(x):
+    """
+    mySineFctn returns f(x) = sin(4*pi*x)
+    Input:
+    x (array of floats): the x-axis vector
+    
+    output:
+    phi (array of floats): sin(4*pi*x)
+    """
+    
+    phi= np.sin(4*np.pi*x)
+    
+    return phi
