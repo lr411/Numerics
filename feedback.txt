@@ -1,0 +1,44 @@
+Some good results presented and some good aspects of the report. The structure of the report is confusing, we each topic being covered twice in section 3. 
+
+16/25
+
+It is unusual to use a lower case delta to describe partial derivatives (your equation 1). Is this just a latex issue? You need to use \partial.
+
+Equation 4 for CTCS is not correct.
+
+It appears that you have re-arranged the formula for Lax-Wendroff (equation 5) to reduce computational cost. However this re-arrangement means that you can no longer see that this formula solves the linear advection equation whereas equations 3 and 4 clearly show that the solution changes in time based on the Courant number and based on gradients in phi. 
+
+At the bottom of page 3, it is not clear what you mean by "a step of 50". 
+
+You should present raw results of the schemes before you present summary diagnostics as in figure 1.
+
+You should you a log-scale in figure 1 rather than taking logarithms of each axis. 
+
+The order of accuracy is not obvious from figure 1. 
+
+For figure 1, what specific values of nt and nx do you use between 50 and 500. 
+
+How did you estimate the order close to 1.7?
+
+In section 3.1.2, how did you estimate the computational cost?
+
+It would be interesting to know the values and units on the y-axis of figure 2.
+
+Not enough description is given introducing figure 3. The experimental design needs to be spelled out in the text, not just in the figure body. 
+
+You are investigating order of accuracy in section 3.1.1 and in section 3.2. 
+
+In section 3.2, dispersion errors should be allowed to affect the error. 
+
+OK, it seems that you are discussing each property twice. I have now come to "Computational cost" again in section 3.3, with more information. 
+
+You may decide that sensitivity to initial conditions is not interesting but you cannot omit initial conditions all together. How else will your simulation start?
+
+Good idea to look at how the cost scales with resolution. This is particularly relevant when comparing high and low order schemes.
+
+For Lax-Wendroff, the oscillations are behind, not ahead of, the discontinuity. 
+
+You conclude that CNCS has the useful property of unconditional stability but you have not presented results to back up this conclusion. 
+
+The conclusions is not the right place to define the initial conditions.
+

@@ -1,0 +1,15 @@
+Please find below details of the code submission for the coursework.
+
+Id of commit: cffbfed7afb767b034d86644da5e231e2f7a3a64
+
+The following are the files to consider
+-rw-r--r--   1 lr411  staff     45 15 Nov 14:41 .gitignore
+-rw-r--r--@  1 lr411  staff    743 29 Nov 23:10 README.txt
+-rw-r--r--   1 lr411  staff  10063 29 Nov 23:30 advectionSchemes.py
+-rw-r--r--   1 lr411  staff    797 28 Nov 21:37 diagnostics.py
+-rw-r--r--   1 lr411  staff   1442 29 Nov 16:45 initialConditions.py
+-rwxr-xr-x   1 lr411  staff   9304 29 Nov 23:38 linearAdvect.py : main file
+
+Please note that there are additional subdirectories in the repo, that are not to be considered.
+
+just realized my code submission was probably not running for an error in the import of pylab: I had changed the name of the import and forgot to change the name in the code. I was not having errors because pylab was anyway loaded with the previous name in spyder. I realized now because I closed and re-opened spyder so it had to load everything anew

@@ -1,0 +1,28 @@
+Overall mark for code - 13/15
+
+You have responded well to most of the feedback - 5/5
+
+You still shouldn't have .png files in the repository
+
+Well structured, correct, clear, well commented code - 8/10
+
+
+The code says:
+# the following is included because otherwise the first time I run\
+# the code gives an error
+import pylab as py
+
+Well yes, you use pylab!
+
+You justify your use of append by saying that it is less error prone. I disagree if you structure your code well. For example you could use:
+
+schemes = ["FTBS", "CTCS", "FTCS"]
+nSchemes = len(schemes)
+errors = np.zeros(nSchemes)
+for i in range(nSchemes):
+    errors[i] = ...
+
+My technique would also avoid a lot of code duplication that you have in linearAdvect.py
+
+Great to use sparse matrices.
+
